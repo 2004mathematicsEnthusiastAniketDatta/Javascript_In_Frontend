@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cascading Style Sheets</title>
+    <style>
+        /* internal css */
+        *{
+          padding:0;
+          margin: 0;
+          outline: 0;
+          box-sizing: border-box;
+        }
+        .marquee {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 50px; /* adjust the height to your needs */
+  background-color: #f0f0f0; /* adjust the background color to your needs */
+}
+
+.marquee-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: marquee 10s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+#textFirst{
+            font-size: 30px;
+            padding: 20px;
+
+        }
+#btn0{
+    border-radius: 15%;
+    background-color: blue;
+}
+#btn1{
+    margin-left: 0.2em;
+    border-radius: 15%;
+}
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- inline css -->
+    <marquee class="first" id="textFirst" style="text-decoration: underline; background-color: blue; color:white" >This is a CSS class</marquee>
+    <button id="btn0" class="button" style="background-color: rgb(14, 47, 235);">click me</button>
+    <button id="btn1" class="button" style="background-color: rgb(214, 42, 42);">click me</button>
+
+    <!-- button got few styling from the browser like grey back ground default text-style,text-color from the user agent stylesheet which can be overridden -->
+     <!-- css_selectors{Property(ies):Value(s);} -->
+
+</body>
+</html>
