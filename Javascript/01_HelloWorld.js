@@ -56,8 +56,8 @@ class MessagePrinter {
 }
 
 class Application {
-    constructor() {
-        this.messagePrinter = new MessagePrinter('Hello, World!');
+    constructor(who) {
+        this.messagePrinter = new MessagePrinter(`Hello, World! ${who}`);
     }
 
     run() {
@@ -65,7 +65,7 @@ class Application {
     }
 }
 
-const app = new Application();
+const app = new Application("user");
 app.run();
 
 // # JavaScript Object-Oriented Programming: Hello World Example Documentation
