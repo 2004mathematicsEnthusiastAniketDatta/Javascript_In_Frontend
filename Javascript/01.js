@@ -45,9 +45,27 @@ A showroom displays finished products to potential customers, organized to highl
 In the JavaScript ecosystem, custom application code combined with database systems serves a similar purpose to the showroom and its supporting infrastructure. Custom code creates the user interface and business logic that directly interacts with users, comparable to the carefully arranged displays in a showroom. Databases store, organize, and retrieve the information that powers these interactions, similar to the inventory systems behind a physical showroom.
 MongoDB, which uses V8 (the same JavaScript engine that powers Node.js) and stores data in JSON-like structures, represents a particularly harmonious database choice for JavaScript applications1. This integration creates a consistent developer experience from data storage through application logic to user interface, similar to how successful showrooms maintain visual and functional consistency across different product lines. */
 /*Raw Data Provider is the Database */
-function printHello(){
-    let a=`Hello World`; 
-    console.log(a);
+class MessagePrinter {
+    constructor(message) {
+        this.message = message;
+    }
+
+    printMessage() {
+        console.log(this.message);
+    }
 }
-printHello();
+
+class Application {
+    constructor() {
+        this.messagePrinter = new MessagePrinter('Hello, World!');
+    }
+
+    run() {
+        this.messagePrinter.printMessage();
+    }
+}
+
+const app = new Application();
+app.run();
+
 
