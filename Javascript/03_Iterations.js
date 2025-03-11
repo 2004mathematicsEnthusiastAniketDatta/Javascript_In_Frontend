@@ -270,7 +270,6 @@ console.log(person.profileIndividual());
 console.log(typeof(person.favoriteClass));
 console.log(typeof(person.isPaid));
 console.log(typeof(person.skills));
-
 // in object , if key is not present then it will be undefined , key: value pairs in memory
 //in array , the first key is - , second is 1, third is 2 and so on
 
