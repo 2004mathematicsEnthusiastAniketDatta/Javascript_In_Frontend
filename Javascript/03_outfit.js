@@ -263,5 +263,6 @@ const WeatherType = {
     ui.showRecommendationForWeather(currentWeather);
     
     // Example of location-based recommendation (async)
-    await ui.showRecommendationForLocation("New York");
+    await ui.showRecommendationForLocation("New York, NY");
   })();
+  
