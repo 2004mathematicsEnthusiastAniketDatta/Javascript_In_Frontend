@@ -18,7 +18,8 @@ arrays(){
     console.log(intFruits[0]);
     console.log(intFruits[1]);
     console.log(intFruits[2]);
-    intFruits.pop(); // removes last element
+    console.log(intFruits.pop());
+    ; // removes last element
     intFruits.shift(); // removes first element
     console.log(intFruits);
     console.log(intFruits.indexOf("kiwi"));
