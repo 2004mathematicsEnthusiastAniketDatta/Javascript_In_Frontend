@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern KanBan Board</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="A Modern KanBan Board with HTML, CSS and JavaScript">
+    <meta name="keywords" content="KanBan, Board, Modern, HTML, CSS, JavaScript">
+    <meta name="author" content="Aniket Datta">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon.ico">
+</head>
+<body>
+    <h1>KanBan Board</h1>
+    <div class="container">
+        <div class="board">
+            <!--To Do Column-->
+            <div class="column" id="todo">
+                <h2>To Do <span id="todo-count"> 0</span></h2>
+                <div class="tasks" id="todo-tasks"></div>
+                <input 
+                type="text"
+                class="task-input"
+                id="todo-input"
+                placeholder="Enter a task..."
+                />
+                <button class="add-task" onclick="addTask('todo')">Add Task</button>
+            </div>
+            <!--Doing Column-->
+            <div class="column" id="doing">
+                <h2>Doing <span id="doing-count"> 0</span></h2>
+                <div class="tasks" id="doing-tasks"></div>
+                <input 
+                type="text"
+                class="task-input"
+                id="doing-input"
+                placeholder="Enter a task..."
+                />
+                <button class="add-task" onclick="addTask('doing')">Add Task</button>
+            </div>
+            <div class="column" id="done">
+                <h2>Done <span id="done-count"> 0</span></h2>
+                <div class="tasks" id="done-tasks"></div>
+                <input 
+                type="text"
+                class="task-input"
+                id="done-input"
+                placeholder="Enter a task..."
+                />
+                <button class="add-task" onclick="addTask('done')">Add Task</button>
+            </div>
+        </div>
+        <div class="context-menu">
+            <ul>
+                <li onclick="editTask()">Edit Task</li>
+                <li onclick="deleteTask()">Delete Task</li>
+            </ul>
+        </div>
+    </div>
+    <script src="todo.js"></script>
+</body>
+</html>
