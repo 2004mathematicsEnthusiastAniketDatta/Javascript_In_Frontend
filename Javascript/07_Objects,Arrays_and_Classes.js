@@ -216,3 +216,148 @@ console.log(remote.brand);
 console.log(remote['brand']);
 console.log(remote.dimensions.height);
 console.log(remote['dimensions']['height']);
+let fname ='Aniket';
+let middleName = '';
+let lastname ='Datta';
+console.log(fname + ' ' + middleName + ' ' + lastname);
+middleName = null;
+console.log(fname + ' ' + middleName + ' ' + lastname);
+middleName = undefined;
+console.log(fname + ' ' + middleName  +' ' + lastname);
+let p1 = {
+    fname: "Hussein",
+}
+
+let p2 = p1;
+console.log(p2);
+p2["lname"] = "Nasser";
+console.log(p1);
+console.log(p2);
+
+//Stack and Heap Memory
+// Stack Memory is used to store variables that are declared inside a function.
+// Stack Memory is used to store primitive data types.
+// Stack Memory is used to store function calls.
+// Stack Memory is used to store function arguments.
+// Stack Memory is used to store function local variables.
+// Stack Memory is used to store function return addresses.
+// Stack Memory is used to store function execution context.
+// Stack Memory is used to store function scope.
+// Stack Memory is used to store function parameters.
+// Stack Memory is used to store function references.
+// Stack Memory is used to store function pointers.
+// Stack Memory is used to store function variables.
+// Stack Memory is used to store function values.
+// Stack Memory is used to store function expressions.
+// Stack Memory is used to store function declarations.
+// Stack Memory is used to store function closures. 
+// Heap Memory is used to store objects.
+// Heap Memory is used to store arrays.
+// Heap Memory is used to store functions.
+// Heap Memory is used to store objects created with new.
+// Heap Memory is used to store objects created with Object.create.
+// Heap Memory is used to store objects created with Object.assign.
+// Heap Memory is used to store objects created with Object.setPrototypeOf.
+// Heap Memory is used to store objects created with Object.defineProperties.
+// Heap Memory is used to store objects created with Object.defineProperty.
+// Heap Memory is used to store objects created with Object.freeze.
+// Heap Memory is used to store objects created with Object.seal.
+// Heap Memory is used to store objects created with Object.preventExtensions.
+// Heap Memory is used to store objects created with Object.fromEntries.    
+// Heap Memory is used to store objects created with Object.entries.
+// Heap Memory is used to store objects created with Object.keys.
+// Heap Memory is used to store objects created with Object.values.
+// Heap Memory is used to store objects created with Object.getOwnPropertyNames.
+// Heap Memory is used to store objects created with Object.getOwnPropertySymbols.
+// Heap Memory is used to store objects created with Object.getPrototypeOf.
+// Heap Memory is used to store objects created with Object.setPrototypeOf.
+// Heap Memory is used to store objects created with Object.is.
+// Heap Memory is used to store objects created with Object.assign.
+// Heap Memory is used to store objects created with Object.create.
+// Heap Memory is used to store objects created with Object.defineProperties.
+// Heap Memory is used to store objects created with Object.defineProperty.
+// Heap Memory is used to store objects created with Object.freeze.
+// Heap Memory is used to store objects created with Object.seal.
+// Heap Memory is used to store objects created with Object.preventExtensions.
+// Heap Memory is used to store objects created with Object.fromEntries.
+// Heap Memory is used to store objects created with Object.entries.
+
+//Stack does not grow dynamically like heap memory.
+//Heap memory grows dynamically.
+//Objects, arrays, and functions are stored in heap memory and are reference data types->
+//  reference gets copied when some object array or function is assigned to another function.
+//Primitive data types are stored in stack memory.
+//Stack memory is faster than heap memory.
+//References are stored in stack memory with the variable storing the reference data types and data structures.
+//here , Say p1 is having some reference 0x1 in the heap memory 
+// which is in the stack memory and the object is stored in the heap memory with the same refernce 0x1. Now
+// on copying p2 = p1 , the reference 0x1 is copied to p2 and the object is not copied to p2. So, if we change the object in p1 ,
+//  the object in p2 will also change and vice versa.
+//let var=Reference Pointer Memory address in heap memory , var = reference is in stack memory.
+//p2=0x1 , with change in the object with reference 0x1 in p2 , the object in p1 will also change.
+//Objects are reference data types and are stored in heap memory.
+// TradeOffs between stack and heap memory.
+// Stack memory is faster than heap memory.
+// Stack memory is limited in size.
+// Stack memory is used for primitive data types.
+// Stack memory is used for function calls.
+// Stack memory is used for function arguments.
+// Stack memory is used for function local variables.
+// Stack memory is used for function return addresses.
+// Stack memory is used for function execution context.
+// Stack memory is used for function scope.
+// Stack memory is used for function parameters.
+// Stack memory is used for function references.
+// Stack memory is used for function pointers.
+// Stack memory is used for function variables.
+//Heap memory is used for objects.
+// Heap memory is used for arrays.
+// Heap memory is used for functions.
+// Heap memory grows dynamically and reading and writing will be sow because of extra hop to the heap memory.
+//Heap memory is used for objects created with new.
+// Heap memory is used for objects created with Object.create.
+
+//Garbage Collection
+// Garbage Collection is the process of automatically freeing up memory that is no longer being used.
+// Garbage Collection is the process of automatically deallocating memory that is no longer needed.
+// Garbage Collection is the process of automatically reclaiming memory that is no longer in use.
+// Garbage Collection is the process of automatically cleaning up memory that is no longer required.
+// Garbage Collection is the process of automatically releasing memory that is no longer necessary.
+// Garbage Collection is the process of automatically disposing of memory that is no longer useful.
+
+//Garbage Collector is a program that automatically frees up memory that is no longer being used.
+// The variables are removed from STACK memory and the objects are removed from the HEAP memory with the help of automatic garbage collection.
+
+//Memory Leaks
+// Memory Leaks are the result of a program using memory inefficiently.
+// Memory Leaks are the result of a program not releasing memory that is no longer needed.
+// Memory Leaks are the result of a program not deallocating memory that is no longer in use.
+// Memory Leaks are the result of a program not reclaiming memory that is no longer required.
+// Memory Leaks are the result of a program not cleaning up memory that is no longer necessary.
+p2 = null;
+console.log(p2);
+console.log(p1);
+let p3={
+    Frontend: 'ReactJs',
+    Backend: 'NodeJs with ExpressJs',
+    Database: 'Mongoose and MongoDB',
+    Projects:{
+        Project1: 'E-Commerce Website',
+        Project2: 'Blog Website',
+        Project3: 'Social Media Website',
+    }
+}
+let p4={
+    ...p3 //Spread Operator ... Shallow Copy -> Pass by Reference
+}
+p4.Backend='Bun with ExpressJs';
+console.log(p3);
+console.log(p4);
+p3.Projects={
+
+}
+//Deep Copy -> Convert object to string and then convert string to object.
+let p5 = JSON.parse(JSON.stringify(p3));
+p5.Projects.Project1='E-Commerce Website with ReactJs';
+console.log(p3);
+console.log(p5);
