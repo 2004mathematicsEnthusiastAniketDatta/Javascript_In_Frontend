@@ -361,3 +361,7 @@ let p5 = JSON.parse(JSON.stringify(p3));
 p5.Projects.Project1='E-Commerce Website with ReactJs';
 console.log(p3);
 console.log(p5);
+//Classes
+// Classes are a blueprint for creating objects.
+// Classes are used to create objects.
+// Classes are used to create instances of objects.
