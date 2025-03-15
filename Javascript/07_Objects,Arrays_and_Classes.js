@@ -118,4 +118,101 @@ for(let i=teas.length-1;i>=0;i--){
     reversedTeas.push(teas[i]);
 }
 console.log(reversedTeas);
-
+//Objects-Data Structures in JS
+// Data Structure is a particular way of organizing and storing data in a computer so that it can be accessed and modified efficiently.
+// Objects are used to store multiple pieces of information in a single place.
+// Objects are created using curly braces {}.
+// Objects are made up of key-value pairs.
+// Keys are strings that identify the values.
+// Values can be any data type, such as strings, numbers, booleans, arrays, or even other objects.
+// Keys and values are separated by a colon :.
+// Key-value pairs are separated by commas ,.
+// Objects can be stored in variables.
+// Objects can be nested inside other objects.
+// Objects can be passed as arguments to functions.
+// Objects can be returned from functions.
+// Objects can be used to create complex data structures.
+// Objects can be used to model real-world entities.
+// Objects can be used to represent data in a structured way.
+// Objects can be used to organize and manipulate data.
+//Objects-Properties and Methods
+// Properties are values associated with an object. 
+// 2 Types of data types are Primitive and Non Primitive Data Types.
+// Primitive Data Types are stored directly in the location the variable accesses.
+// Primitive Data Types are stored on the stack.
+// Primitive Data Types are accessed by their actual value.
+// Primitive Data Types are immutable.
+// Primitive Data Types are passed by value.
+// Primitive Data Types are copied by their value.
+// Non-Primitive Data Types are stored in the heap.
+// Non-Primitive Data Types are accessed by reference.
+// Non-Primitive Data Types are mutable.
+// Non-Primitive Data Types are passed by reference.
+// Non-Primitive Data Types are copied by their reference.
+// Methods are functions associated with an object.
+// Methods are called using dot notation.
+// Methods can be used to perform actions on objects.
+// Methods can be used to modify objects.
+// Methods can be used to access object properties.
+// Methods can be used to interact with objects.
+// For objects we need Curly Braces {}.
+// For arrays we need Square Brackets [].
+// For functions we need Parentheses ().
+const x=10
+console.log(x+10);
+const person ={
+    firstname: 'Aniket',
+    lastname: 'Datta',
+    age: 20,
+    hobbies: ['coding', 'reading', 'gaming'],
+    isMarried: false,
+    address: {
+        pin: 700035,
+        city: 'Kolkata',
+        state: 'West Bengal',
+        country: 'India'
+    },
+    getFullName: function(){
+        return `${this.firstname} ${this.lastname}`;
+    }
+}
+console.log(person.hobbies);
+console.table([person.address.pin,person.address.city, person.address.state, person.address.country]);
+console.log(person.getFullName());
+console.log(person['getFullName']());
+console.log(person.firstname);
+console.log(person['firstname']);
+console.log(person.age);
+console.log(person['age']);
+console.log(person.isMarried);
+console.log(person['isMarried']);
+console.log(person.address.pin);
+console.log(person['address']['pin']);
+//Real=World stuff are represented by Objects.
+const remote ={
+    color: 'black',
+    brand: 'sony',
+    dimensions:{height: 1, width: 1},
+    turnOff: function(){
+        console.log('turning off');
+    },
+    turnOn: function(){
+        console.log('turning on');
+    },
+    volumeUp: function(){
+        console.log('volume up');
+    },
+    volumeDown: function(){
+        console.log('volume down');
+    },
+    changeChannel: function(){
+        console.log('changing channel');
+    },
+    changeColor: function(){
+        console.log('changing color');
+    },
+};
+console.log(remote.brand);
+console.log(remote['brand']);
+console.log(remote.dimensions.height);
+console.log(remote['dimensions']['height']);
