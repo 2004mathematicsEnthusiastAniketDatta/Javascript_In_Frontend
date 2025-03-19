@@ -361,7 +361,125 @@ let p5 = JSON.parse(JSON.stringify(p3));
 p5.Projects.Project1='E-Commerce Website with ReactJs';
 console.log(p3);
 console.log(p5);
+
 //Classes
 // Classes are a blueprint for creating objects.
 // Classes are used to create objects.
 // Classes are used to create instances of objects.
+/**
+ * Demonstrating object-oriented concepts with JavaScript prototypes
+ */
+
+// Creating a base Tea class
+class Tea {
+    constructor(name, type) {
+      this.name = name;
+      this.type = type;
+    }
+    
+    brew() {
+      console.log(`Brewing ${this.name}, a ${this.type} tea`);
+    }
+  }
+  
+  // ChaiTea extends Tea
+  class ChaiTea extends Tea {
+    constructor(name, type, spices = []) {
+      super(name, type);
+      this.spices = spices;
+    }
+    
+    addSpice(spice) {
+      this.spices.push(spice);
+      return this;
+    }
+    
+    serve() {
+      console.log(`Serving ${this.name} with ${this.spices.join(', ')}`);
+    }
+  }
+  
+  // Create instance and use methods
+  const icedChaiTea = new ChaiTea("Ice Tea Lemon", "Cool");
+  icedChaiTea.brew();
+  icedChaiTea.addSpice("cinnamon").addSpice("cardamom").serve();
+  console.log(icedChaiTea);
+  
+  // Enhanced Array functionality - proper way using prototypes
+  // Note: In production, extending native prototypes is generally not recommended
+  if (!Array.prototype.sum) {
+    Array.prototype.sum = function() {
+      // Using regular function to ensure proper 'this' binding
+      let sum = 0;
+      for (let i = 0; i < this.length; i++) {
+        sum += this[i];
+      }
+      return sum;
+    };
+  }
+  
+  // Using Array prototype methods
+  const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  console.log("Original array:", arr);
+  console.log("Sum of array elements:", arr.sum());
+  
+  // Creating array with generator pattern
+  class EnhancedArray extends Array {
+    static createSequence(length) {
+      const array = new EnhancedArray(length);
+      return array.fill(0).map((v, i) => i);
+    }
+    
+    // Adding custom methods to our enhanced array
+    sum() {
+      return this.reduce((acc, val) => acc + val, 0);
+    }
+    
+    average() {
+      return this.sum() / this.length;
+    }
+  }
+  
+  // Using our enhanced array class
+  const arr2 = EnhancedArray.createSequence(10);
+  console.log("Generated sequence:", arr2);
+  arr2.sort(); // Still has access to normal Array methods
+  console.log("Sorted sequence:", arr2);
+  console.log("Sum using enhanced method:", arr2.sum());
+  console.log("Average:", arr2.average());
+  
+  // String operations - proper OOP approach
+  class StringProcessor {
+    constructor(text) {
+      this.text = String(text);
+    }
+    
+    get length() {
+      return this.text.length;
+    }
+    
+    toUpperCase() {
+      return new StringProcessor(this.text.toUpperCase());
+    }
+    
+    charAt(index) {
+      return this.text.charAt(index);
+    }
+    
+    toString() {
+      return this.text;
+    }
+  }
+  
+  const name = new StringProcessor('Aniket');
+  console.log("String length:", name.length);
+  console.log("First character:", name.charAt(0));
+  console.log("Uppercase:", name.toUpperCase().toString());
+  
+  // Demo of inheritance chain
+  console.log("\nInheritance chain demonstration:");
+  console.log("EnhancedArray is instance of Array:", arr2 instanceof Array);
+  console.log("icedChaiTea is instance of ChaiTea:", icedChaiTea instanceof ChaiTea);
+  console.log("icedChaiTea is instance of Tea:", icedChaiTea instanceof Tea);
+  console.log("icedChaiTea is instance of Object:", icedChaiTea instanceof Object);
+  
