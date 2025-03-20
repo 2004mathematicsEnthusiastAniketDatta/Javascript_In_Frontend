@@ -112,4 +112,34 @@ if (!Array.prototype.includes) {
     // );
 console.log(ret02);
 //Output: [ 2, 6, 6, 12, 10, 18]
-
+//Filter Polyfill
+//1. Signature and return type Analysis
+const arr6 = [1,2,3,4,5,6,7,8,9,10];
+if(!Array.prototype.filter) throw new Error('Please update the browser');
+//arr6.filter(function(element,index,arr6){});
+let ret3 = arr6.filter(function(element,index){
+  return element%2==0;
+});
+console.log(ret3); //[2,4,6,8,10] -> Returns a new array
+//when functions are passed as a parameter to another function, they are called callback functions.
+//2. Implementation
+if(!Array.prototype.Filter){
+  Array.prototype.Filter=function(callback){
+    if(this == null) throw new TypeError('this is null or not defined');
+    let O = Object(this);
+    let len = O.length >>> 0;
+    let filteredArr = [];
+    for(let i=0;i<len;i++){
+      if(i in O){
+        if(callback(O[i],i,O)){
+          filteredArr.push(O[i]);
+        }
+      }
+    }
+    return filteredArr;
+  };
+}
+let ret4 = arr6.Filter(function(element,index){
+  return element%2==1;
+});
+console.log(ret4);

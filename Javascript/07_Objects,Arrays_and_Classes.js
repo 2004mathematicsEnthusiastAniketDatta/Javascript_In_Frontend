@@ -482,4 +482,7 @@ class Tea {
   console.log("icedChaiTea is instance of ChaiTea:", icedChaiTea instanceof ChaiTea);
   console.log("icedChaiTea is instance of Tea:", icedChaiTea instanceof Tea);
   console.log("icedChaiTea is instance of Object:", icedChaiTea instanceof Object);
-  
+//OBJECTS,CLASSES AND OBJECT-ORIENTED PROGRAMMING
+//Objects are not key value pairs always but they are representation of Real-World entities.
+//Object is real-world entity with some properties and methods.
+// Properties are Color,Weight and methods are procedures,actions and functions
