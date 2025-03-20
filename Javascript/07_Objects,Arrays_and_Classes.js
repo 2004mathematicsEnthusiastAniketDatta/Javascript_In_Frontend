@@ -611,4 +611,12 @@ console.log(p03.getFullName());
 
 //10. Constructors create a new execution context where `this` refers to the newly created object instance rather than the global object.
 //
-//
+//11. Illegal Code:
+obj2.__proto__=obj1;
+console.log(obj2.getFullName());
+console.log( obj2.toString());
+// obj2.__proto__=null;
+// console.log( obj2.toString()); //TypeError: obj2.toString is not a function
+//Prototype Inheritance 
+//Prototype is a property of an object that points to the object's parent.
+
