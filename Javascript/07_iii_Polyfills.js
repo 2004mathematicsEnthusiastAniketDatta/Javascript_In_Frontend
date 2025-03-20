@@ -143,3 +143,43 @@ let ret4 = arr6.Filter(function(element,index){
   return element%2==1;
 });
 console.log(ret4);
+
+//Reduce Polyfill
+//1. Signature and return type Analysis
+const arr7 = [1,2,3,4,5,6,7,8,9,10];
+if(!Array.prototype.reduce) throw new Error('Please update the browser');
+//arr7.reduce(function(accumulator,element,index,arr7){},initialValue);
+let ret5 = arr7.reduce(function(accumulator,element){
+  return accumulator+element;
+},0);
+console.log(ret5); //55 -> Returns a single value
+//2. Implementation
+if(!Array.prototype.Reduce){
+  Array.prototype.Reduce = function(callback,initialValue){
+    if(this == null) throw new TypeError('this is null or not defined');
+    let O = Object(this);
+    let len = O.length >>> 0;
+    let accumulator = initialValue;
+    let k = 0;
+    if(accumulator === undefined){
+      for(;k<len;k++){
+        if(k in O){
+          accumulator = O[k];
+          k++;
+          break;
+        }
+      }
+    }
+    for(;k<len;k++){
+      if(k in O){
+        accumulator = callback(accumulator,O[k],k,O);
+      }
+    }
+    return accumulator;
+  };
+}
+let ret6 = arr7.Reduce(function(accumulator,element){
+  return accumulator+element;
+},0);
+console.log(ret6);
+//Output: 55

@@ -619,4 +619,106 @@ console.log( obj2.toString());
 // console.log( obj2.toString()); //TypeError: obj2.toString is not a function
 //Prototype Inheritance 
 //Prototype is a property of an object that points to the object's parent.
+console.log( Person.__proto__);// o/p: [Function]
+console.log( Person.prototype);// o/p: {constructor: ƒ}
+console.log( Person.prototype.__proto__);// o/p: {constructor: ƒ}
+console.log( Person.prototype.__proto__.__proto__);// o/p: null
+console.log(p01.__proto__);// o/p: Person {}
+console.log(p01.__proto__.__proto__);// o/p: {}
+console.log(p01.__proto__.__proto__.__proto__);// o/p: null 
+
+class A{
+  funInsideA(){};
+}
+class B{
+  funInsideB(){};
+}
+const p = new B();
+p.funInsideB();
+console.log(p.funInsideB());
+//p.funInsideA();//TypeError: p.funInsideA is not a function
+p.__proto__=new A();
+p.funInsideA(); 
+console.log(p.__proto__);
+console.log(p.__proto__.__proto__);
+// console.log(p.funInsideB());
+console.log(p.funInsideA());
+//Inheritance
+//Inheritance is the mechanism by which a class can inherit
+// properties and methods from another class.
+//Inheritance is the mechanism by which a subclass can inherit
+
+class A0{
+  funInsideA0(){
+    console.log('Function inside A0');
+  };
+}
+class B0 extends A0{
+  funInsideB0(){
+    console.log('Function inside B0');
+  };
+}
+const p0 = new B0();
+p0.funInsideA0();
+p0.funInsideB0();
+// B0.prototype.funInsideA0(); //constructor
+// : 
+// class B0
+// funInsideB0
+// : 
+// ƒ funInsideB0()
+// [[Prototype]]
+// : 
+// Object
+// constructor
+// : 
+// class A0
+// funInsideA0
+// : 
+// ƒ funInsideA0()
+// [[Prototype]]
+// : 
+// Object
+// constructor
+// : 
+// ƒ Object()
+// hasOwnProperty
+// : 
+// ƒ hasOwnProperty()
+// isPrototypeOf
+// : 
+// ƒ isPrototypeOf()
+// propertyIsEnumerable
+// : 
+// ƒ propertyIsEnumerable()
+// toLocaleString
+// : 
+// ƒ toLocaleString()
+// toString
+// : 
+// ƒ toString()
+// valueOf
+// : 
+// ƒ valueOf()
+// __defineGetter__
+// : 
+// ƒ __defineGetter__()
+// __defineSetter__
+// : 
+// ƒ __defineSetter__()
+// __lookupGetter__
+// : 
+// ƒ __lookupGetter__()
+// __lookupSetter__
+// : 
+// ƒ __lookupSetter__()
+// __proto__
+// : 
+// (...)
+// get __proto__
+// : 
+// ƒ __proto__()
+// set __proto__
+// : 
+// ƒ __proto__()
 

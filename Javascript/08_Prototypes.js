@@ -121,8 +121,8 @@ console.log(person.__proto__.__proto__);//null
 //Almost all Javascript constructs except null and undefined inherit from Object.prototype.
 //Object.prototype gives them access to methods like toString() and ValueOf().
 // From your code
-const arr2 = new Array(10).fill(0).map((v,i) => i);
-arr2.__proto__.normalsum = function() {
+const arr02 = new Array(10).fill(0).map((v,i) => i);
+arr02.__proto__.normalsum = function() {
     let sum = 0;
     for (let i = 0; i < this.length; i++) {
       sum = sum + this[i];
@@ -148,22 +148,22 @@ console.log(summation);
 //3. Functions, arrays and Regular expressions are objects.
 //4. Almost everything shares inheritance from Object.prototype.
 
-arr2.__proto__.normalsum = function() {
+arr02.__proto__.normalsum = function() {
   let sum = 0;
   for (let i = 0; i < this.length; i++) {
     sum = sum + this[i];
   }
   return sum;
 };
-summation = arr2.normalsum();
+summation = arr02.normalsum();
 console.log(summation);
 //reduce: Polyfill
 
-arr2.__proto__.reducesum = function() {
+arr02.__proto__.reducesum = function() {
   const sumArray = this.reduce((total, num) => total + num, 0);
   console.log(sumArray);
 }
-arr2.reducesum();
+arr02.reducesum();
 //reduce: Higher Order Function
 //reduce() is a higher-order function that takes a callback function as an argument.
 //The callback function takes two arguments: the accumulator and the current value.
@@ -174,15 +174,16 @@ arr2.reducesum();
 
 //reduce() Syntax
 
-arr2.__proto__.Reduce = function(callback, initialValue) {
+arr02.__proto__.Reduce = function(callback, initialValue) {
   let accumulator = initialValue;
   for (let i = 0; i < this.length; i++) {
     accumulator = callback(accumulator, this[i]);
   }
   return accumulator;
 }
-const sum = arr2.Reduce((total, num) => total + num, 0);
+const sum = arr02.Reduce((total, num) => total + num, 0);
 console.log(sum);
 
 //We can add methods to Array.prototype to extend the functionality of arrays.
+
 
