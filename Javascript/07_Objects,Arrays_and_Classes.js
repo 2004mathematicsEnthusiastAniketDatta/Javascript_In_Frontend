@@ -486,3 +486,129 @@ class Tea {
 //Objects are not key value pairs always but they are representation of Real-World entities.
 //Object is real-world entity with some properties and methods.
 // Properties are Color,Weight and methods are procedures,actions and functions
+// Structs
+// C: A struct is a composite data type that groups variables of different data types 
+// under a single name.
+// Rust: A struct is a custom data type that lets you package together and name multiple 
+// related values.
+// C++: A struct is a user-defined type that groups related variables of
+//  different data types (functionally similar to a class but with default public visibility).
+
+// Classes
+// C++: A class is a user-defined blueprint for creating objects that encapsulates data members and 
+// functions, with default private access.
+// Java: A class is a blueprint for creating objects that defines the state 
+// and behavior objects will have.
+// JavaScript: A class is a template for creating objects, providing 
+// initial values for state and implementations of behavior (syntactic sugar over prototype-based inheritance).
+
+// Key differences
+// - Structs in C traditionally don't have methods (only data), while C++ structs can have methods
+// - C++ structs and classes differ mainly in default access level (public vs private)
+// - JavaScript classes were added in ES6, but objects existed through prototypal inheritance
+
+// Javascript first version was an unplanned language,created in 10 days.
+// JS was created  to interact with browsers.
+//Node JS was created to interact with servers.
+//SASS applications, Cross-platform applications, Desktop applications, Mobile applications, 
+// Web applications, Web servers, Web APIs, Web services, Web sockets, 
+// Web workers, WebAssembly, WebRTC,
+//  WebVR, WebXR, WebUSB, WebBluetooth, WebGPU, WebAuthn, WebRTC, WebVR
+//JS is backward compatible language with ES5, ES6, ES7, ES8...
+//JS is a single-threaded language.
+//JS is a non-blocking language.
+//JS is a dynamically typed language.
+//JS is a weakly typed language.
+//const obj={Properties,Methods};
+//person1={fname,lname,20+...,age};
+//person2={fname,lname,20+...,age};
+//..................
+//person1 and person 2 are having same keys 
+// but they may differ in values and now I have to keep the age key within every object 
+//say for n objects
+//ES6 Classes
+// Class Person(){
+//.....schema 
+//}
+// Blueprint 
+//const p1 = new Person();
+//const p2 = new Person();
+//new keyword allocates memory for the object in heap memory.
+// p1 , p2 in stack storing some distinct references to the objects in the heap memory.
+// p1 and p2 are having the same schema.
+//Classes are used to create objects.
+//Classes are used to create instances of objects.
+const obj1={
+  fname: 'Aniket',
+  lname: 'Datta',
+  getFullName: function(){
+
+   if (this.lname!==undefined){ 
+    return `${this.fname} ${this.lname}`;
+   }
+    else{
+      return `${this.fname}`;
+
+  }
+ }
+}
+const obj2={
+  fname: 'Ram',
+  lname: 'Datta',
+  getFullName: function(){
+    return `${this.fname} ${this.lname}`; // Debugging becomes difficult if there are n objects
+  }
+}
+console.log(obj1.getFullName());
+// console.log(obj2.getFullName());//TypeError: obj2.getFullName is not a function
+console.log(obj2.getFullName());
+//DRY -> Do not Repeat Yourself is violated
+//Hence we need Class
+//Class is a blueprint for creating objects.
+//CLASS
+class Person{
+  //Parameterized Constructors
+  constructor(fname,lname){
+    this.fname=fname;
+    this.lname=lname;
+  }
+  getFullName(){
+    return `${this.fname} ${this.lname}`;
+  }
+}
+const p01 = new Person('Aniket','Datta'); //constructor(){} Default constructor is created when constructor  Person is called,if the constructor doesnot exist.
+const p02 = new Person('Ram','Datta');
+const p03 = new Person('Shyam','Singh');
+console.log(p01.getFullName());
+console.log(p02.getFullName()); 
+console.log(p03.getFullName());
+//class is a blueprint for the objects.
+//Objects are instances of the class with instantiation of class.
+//Classes are need to construct objects.
+//To construct objects of the class we need a constructor defining the properties,methods 
+// of the class.
+//A constructor is a special method required for creating and initializing objects created from a class.
+//This automtically executes when a new object instance is created with the new keyword.
+
+
+//1. A constructor is a special method used for creating and initializing objects created from a class.
+
+//2. It automatically executes when a new object instance is created using the `new` keyword.
+
+//3. In JavaScript classes, constructors define the initial state (properties) of objects by initializing instance variables.
+
+//4. Constructors implicitly return the newly created instance, unless an explicit return statement returns another object.
+
+//5. JavaScript constructors can accept parameters, allowing for customized object initialization at creation time.
+
+//6. When a subclass extends a parent class, its constructor must call `super()` before accessing `this` to initialize the parent's properties.
+
+//7. Without an explicit constructor, JavaScript automatically provides a default no-argument constructor that calls the parent constructor.
+
+//8. Constructors establish the prototype chain, connecting the instance to its class's prototype for method inheritance.
+
+//9. Unlike regular methods, constructors cannot be called as standalone functions without the `new` keyword (they'll lose their object initialization behavior).
+
+//10. Constructors create a new execution context where `this` refers to the newly created object instance rather than the global object.
+//
+//

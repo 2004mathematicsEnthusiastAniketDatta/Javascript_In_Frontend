@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Component Constructor Chaining Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>UI Component Constructor Chaining</h1>
+        <p>Demonstrating OOP inheritance patterns in modern JavaScript</p>
+    </header>
+
+    <main>
+        <section class="demo-section">
+            <h2>Interactive Demo</h2>
+            <p>The components below are created using the constructor chaining pattern:</p>
+            
+            <div class="component-playground">
+                <div class="component-info">
+                    <h3>Inheritance Hierarchy</h3>
+                    <div class="inheritance-diagram">
+                        <div class="inheritance-level">
+                            <div class="inheritance-box">Component</div>
+                        </div>
+                        <div class="inheritance-arrow">↓</div>
+                        <div class="inheritance-level">
+                            <div class="inheritance-box">Control</div>
+                        </div>
+                        <div class="inheritance-arrow">↓</div>
+                        <div class="inheritance-level">
+                            <div class="inheritance-box">Button</div>
+                        </div>
+                        <div class="inheritance-arrow">↓</div>
+                        <div class="inheritance-level">
+                            <div class="inheritance-box">SubmitButton</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>Live Example</h3>
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter your email">
+                        </div>
+                        <!-- Our button will be injected here by JS -->
+                        <div id="button-container" class="form-actions"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="console-section">
+            <h2>Console Output</h2>
+            <p>Monitor the constructor chaining process:</p>
+            <div class="console-container">
+                <div class="console-header">
+                    <span>Console</span>
+                    <button id="clear-console">Clear</button>
+                </div>
+                <div id="console-output" class="console-output"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Advanced JavaScript OOP Demo © 2025</p>
+    </footer>
+
+    <!-- Script with our constructor chaining example -->
+    <script src="ConstructorChaining.js"></script>
+    
+    <!-- Script to handle the console display -->
+    <script>
+        // Override console.log to display in our custom console
+        (function() {
+            const originalConsoleLog = console.log;
+            const consoleOutput = document.getElementById('console-output');
+            
+            console.log = function(...args) {
+                // Call original console.log
+                originalConsoleLog.apply(console, args);
+                
+                // Format and display in our custom console
+                const message = args.map(arg => {
+                    if (typeof arg === 'object') {
+                        return JSON.stringify(arg, null, 2);
+                    } else {
+                        return String(arg);
+                    }
+                }).join(' ');
+                
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.textContent = message;
+                consoleOutput.appendChild(logEntry);
+                
+                // Auto-scroll to bottom
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            };
+            
+            // Clear console button
+            document.getElementById('clear-console').addEventListener('click', () => {
+                consoleOutput.innerHTML = '';
+            });
+        })();
+    </script>
+    
+    <!-- Modified initialization to use our form container -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Instead of creating a new container, use the existing one
+            const container = document.getElementById('button-container');
+            
+            // Create a submit button in our form
+            const submitBtn = new SubmitButton({
+                id: 'demo-submit',
+                container: container,
+                text: 'Save Changes',
+                validateForm: () => {
+                    const nameInput = document.getElementById('name');
+                    const emailInput = document.getElementById('email');
+                    
+                    console.log('Validating form...');
+                    
+                    if (!nameInput.value) {
+                        console.log('Name is required');
+                        nameInput.classList.add('error');
+                        return false;
+                    }
+                    
+                    if (!emailInput.value || !emailInput.value.includes('@')) {
+                        console.log('Valid email is required');
+                        emailInput.classList.add('error');
+                        return false;
+                    }
+                    
+                    nameInput.classList.remove('error');
+                    emailInput.classList.remove('error');
+                    return true;
+                },
+                onActivate: async () => {
+                    // Mock API call
+                    console.log('Submitting form data...');
+                    return new Promise(resolve => {
+                        setTimeout(resolve, 1500);
+                    });
+                }
+            });
+            
+            // Log the prototype chain
+            console.log('Prototype chain verification:');
+            console.log('- Is Button?', submitBtn instanceof Button);
+            console.log('- Is Control?', submitBtn instanceof Control);
+            console.log('- Is Component?', submitBtn instanceof Component);
+            
+            // Add input event listeners to remove error class
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => {
+                    input.classList.remove('error');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

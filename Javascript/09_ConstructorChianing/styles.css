@@ -1,0 +1,314 @@
+/* Base styling */
+:root {
+    --primary-color: #4361ee;
+    --primary-hover: #3a56d4;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --text-color: #333;
+    --light-text: #666;
+    --lighter-text: #999;
+    --bg-color: #f9f9f9;
+    --border-color: #ddd;
+    --component-bg: #fff;
+    --console-bg: #2d3748;
+    --console-text: #e2e8f0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 4px;
+    --transition: all 0.3s ease;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    padding: 0;
+    margin: 0;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  header h1 {
+    margin-bottom: 0.5rem;
+  }
+  
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  section {
+    margin-bottom: 3rem;
+  }
+  
+  h2 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+  }
+  
+  h3 {
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--console-bg);
+    color: var(--console-text);
+  }
+  
+  /* Component playground */
+  .component-playground {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .component-info, 
+  .interactive-example {
+    flex: 1;
+    min-width: 300px;
+    background-color: var(--component-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+  }
+  
+  /* Inheritance diagram */
+  .inheritance-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .inheritance-level {
+    margin-bottom: 0.5rem;
+  }
+  
+  .inheritance-box {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    text-align: center;
+    width: 200px;
+  }
+  
+  .inheritance-arrow {
+    font-size: 1.5rem;
+    color: var(--light-text);
+    margin: 0.25rem 0;
+  }
+  
+  /* Form styling */
+  .form-container {
+    margin-top: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--light-text);
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  }
+  
+  input.error {
+    border-color: var(--error-color);
+    background-color: rgba(231, 76, 60, 0.05);
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+  }
+  
+  /* Console styling */
+  .console-container {
+    background-color: var(--console-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  
+  .console-header {
+    background-color: #1a202c;
+    color: var(--console-text);
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .console-header button {
+    background: transparent;
+    color: var(--console-text);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+  }
+  
+  .console-header button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .console-output {
+    height: 300px;
+    overflow-y: auto;
+    padding: 1rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    color: var(--console-text);
+    white-space: pre-wrap;
+  }
+  
+  .log-entry {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+  }
+  
+  /* Component styles (for our JS components) */
+  .component {
+    transition: var(--transition);
+  }
+  
+  .control {
+    user-select: none;
+  }
+  
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    box-shadow: var(--shadow);
+    min-width: 180px;
+  }
+  
+  .button-default {
+    background-color: #f8f9fa;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+  
+  .button-primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .button-default:hover {
+    background-color: #e9ecef;
+  }
+  
+  .button-primary:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .button .icon {
+    margin-right: 0.5rem;
+  }
+  
+  .button.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .submit-button {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .submit-button.submitting {
+    background-color: #4361ee;
+    pointer-events: none;
+  }
+  
+  .submit-button.success {
+    background-color: var(--success-color);
+  }
+  
+  .submit-button.error {
+    background-color: var(--error-color);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .component-playground {
+      flex-direction: column;
+    }
+    
+    .inheritance-box {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+  
+  /* Animation for the button states */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  .submitting {
+    animation: pulse 1.5s infinite;
+  }
+  
+  /* Icon classes (to replace Font Awesome if needed) */
+  .icon-check::before {
+    content: "✓";
+    margin-right: 0.5rem;
+  }
