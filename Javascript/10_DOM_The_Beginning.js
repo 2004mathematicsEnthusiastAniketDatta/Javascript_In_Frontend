@@ -834,3 +834,58 @@
 // // 6. Understanding the browser rendering pipeline helps write performant code
 // //  7. Practical DOM manipulation is core to building interactive web applications
 
+Function.prototype.describe=function(){
+    console.log(`Function name is ${this.name}`);
+}
+// describe is an instance method of Function object
+// Function object is a constructor function
+function greet(name){
+    console.log(`Hello ${name}`);
+}
+greet.describe(); //Function name is greet
+//Function declaration
+function add(a,b){
+    return a+b;
+}
+//Function expression
+const subtract=function(a,b){
+    return a-b;
+}
+//Arrow function
+const multiply=(a,b)=>a*b;
+//First class functions
+function applyOperation(a,b,operation){
+    return operation(a,b);
+}
+console.log(applyOperation(10,5,add)); //15
+console.log(applyOperation(10,5,subtract)); //5
+console.log(applyOperation(10,5,multiply)); //50
+const result = applyOperation(10,5,(a,b)=>a/b);
+console.log(result); //2
+//Higher order functions
+const numbers=[1,2,3,4,5];
+const doubled=numbers.map((number)=>number*2);
+console.log(doubled); //[2,4,6,8,10]
+const evens=numbers.filter((number)=>number%2===0);
+console.log(evens); //[2,4]
+const sum=numbers.reduce((acc,number)=>acc+number,0);
+console.log(sum); //15
+//Closure : (Tiffin Concept)
+function createCounter(){
+    let count=0;
+    return function(){
+        count++;
+        return count;
+    }
+}
+const counter=createCounter();
+console.log(counter()); //1
+console.log(counter()); //2
+console.log(counter()); //3
+console.log(counter()); //4
+//IIFE : Immediately Invoked Function Expression
+(function(){
+    console.log('IIFE');
+})();
+({})();
+
