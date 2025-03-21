@@ -722,3 +722,14 @@ p0.funInsideB0();
 // : 
 // ƒ __proto__()
 
+let p3={
+  Frontend: 'ReactJs',
+  Backend: 'NodeJs with ExpressJs',
+  Database: 'MongoDB'
+}
+let p4={
+  ...p3
+}
+p4.Backend='Bun with ExpressJs';
+console.log(p3);
+console.log(p4);
