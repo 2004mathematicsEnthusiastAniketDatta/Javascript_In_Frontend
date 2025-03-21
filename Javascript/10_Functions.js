@@ -888,4 +888,10 @@ console.log(counter()); //4
     console.log('IIFE');
 })();
 ({})();
+//Document Object Model (DOM)
+//DOM is a programming interface for web documents
+//It represents the page as a tree of objects
+//The document object is the entry point to the DOM
+
+
 

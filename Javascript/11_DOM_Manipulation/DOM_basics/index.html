@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Document Object Model</h1>
+    <button class="button" id="darkButton" onclick="changeBackgroundBlack()">flip background b/w</button>
+    <script src="index.js"></script>
+    <script>
+        console.log(document);
+        console.log(document.head);
+        console.log(document.body);
+        console.log(document.documentElement);
+        console.log(document.doctype);
+        console.log(document.title);
+        console.log(document.charset);
+        console.log(window);//window is the global object in the browser
+        console.log(this);//this is also the global object in the browser, which is the current object in the context.
+        console.log(this === window);//true
+        console.log(this.window);
+        window.console.log('JAVASCRIPT');
+    </script>
+</body>
+</html>
