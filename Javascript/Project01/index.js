@@ -3,14 +3,17 @@ import express from 'express';
 import dotenv from 'dotenv';
 
 import cors from 'cors';
-import e from 'express';
+
+import db from './utils/db_connect.js';
 
 dotenv.config();
 
 const app = express();
 
+
+
 app.use(cors({
-    origin: 'https://localhost:4000',
+    origin: process.env.BASE_URL,
     methods: ['GET', 'POST','PUT','DELETE','OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -33,6 +36,8 @@ app.get('/students/:id', (req, res) => {
 )
 console.log(process.env.PORT);
 
+
+db();
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
