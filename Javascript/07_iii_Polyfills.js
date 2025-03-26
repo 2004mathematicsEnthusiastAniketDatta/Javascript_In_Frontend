@@ -183,3 +183,17 @@ let ret6 = arr7.Reduce(function(accumulator,element){
 },0);
 console.log(ret6);
 //Output: 55
+
+Array.prototype.Reduces = function(callback, initialValue){
+  let accumulator = initialValue;
+  for(let i=0; i<this.length; i++){
+      accumulator = callback(accumulator, this[i]);
+  }
+  return accumulator;
+}
+let arr8 = [1,2,3,4,5];
+let initialValue = 0;
+let total = arr8.Reduces((accumulator, currentValue) => accumulator + currentValue, initialValue);
+console.log(total);
+//Output: 15
+
