@@ -146,3 +146,4 @@ You call it directly on the class with SumOfTwoNumbers.sum(1, 2)
 No instance of the class needs to be created
 This approach makes sense for a simple arithmetic operation like addition, as it doesn't require any instance-specific state or behavior. It's essentially a stateless utility function organized within a class.*/
 
+
