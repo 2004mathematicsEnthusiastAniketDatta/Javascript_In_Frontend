@@ -884,14 +884,72 @@ console.log(counter()); //2
 console.log(counter()); //3
 console.log(counter()); //4
 //IIFE : Immediately Invoked Function Expression
-(function(){
-    console.log('IIFE');
-})();
-({})();
-//Document Object Model (DOM)
-//DOM is a programming interface for web documents
-//It represents the page as a tree of objects
-//The document object is the entry point to the DOM
+// (function(){
+//     console.log('IIFE');
+// })();
+// ({})();
 
+function greet(name){
+    console.log(`Hello ${name}`);
+}
+greet('Alice');
+greet('Bob');
+
+let GlobalVar = "I am a global variable";
+
+function modifyGlobalVar(){
+    GlobalVar = "I am modified";
+    let blockScopedVar = "I am a block scoped variable";
+    console.log(GlobalVar);
+}
+
+modifyGlobalVar(); // I am modified
+
+//Immediately Invoked Function Expression
+let config = function (){
+    let isConfigured = false;
+    return function(){
+        if(!isConfigured){
+            console.log('Configuring the application');
+            isConfigured = true;
+        }
+    }
+}();
+
+(()=>{
+    let settings = {
+        theme: 'Dark',
+        version: '1.0.0'
+    }
+    return settings;
+})();
+
+
+let person1 = {
+    name: 'Aniket',
+    greet: function(){
+        console.log(`Hello ${this.name}`);
+    }
+}
+console.log(person1.name); //Aniket
+person1.greet(); //Hello Aniket
+
+let person2 = {
+    name: 'Hitesh'
+}
+person2.__proto__ = person1;
+console.log(person2.name); //Hitesh
+person2.greet(); //Hello Hitesh
+
+//call method -> Providing context in the form of object  to the function and calling 
+person1.greet.call(person2); //Hello Hitesh
+
+//bind method
+const bindedGreet = person1.greet.bind(person2);
+bindedGreet(); //Hello Hitesh
+console.log(bindedGreet);
+
+//apply method
+person1.greet.apply(person2); //Hello Hitesh
 
 
