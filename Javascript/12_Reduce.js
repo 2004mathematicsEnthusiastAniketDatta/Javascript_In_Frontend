@@ -186,3 +186,39 @@ return currentValue.minutes > accumulator.minutes ? currentValue : accumulator;
 console.log(leastUserActivity);
 console.log(mostActiveUser);
 
+let expenses =[
+  {description:"Groceries", amount:50, category:"Food"},
+  {description: "Electric Bill", amount:100, category:"Utilities"},
+  {description: "Dinner" , amount:200, category:"Food"},
+  {description: "Internet Bill", amount:50, category:"Utilities"}
+];
+
+let expenseReport = expenses.reduce((report,expense) => {
+  report[expense.category] = (report[expense.category] || 0) + expense.amount;
+  return report;
+}, {Food:0, Utilities:0});
+
+console.log(expenseReport);
+
+
+let tasks = [
+  {description: 'Write report', completed: false , priority: 2 },
+  {description: 'Send Email',completed: true, priority: 1},
+  {description: 'Call Jenny', completed: false, priority: 3}
+]
+let pendingSortedTasks = tasks
+.filter((task) => !task.completed)
+.sort((a,b) => a.priority - b.priority)
+console.log(pendingSortedTasks);
+
+let movieRatings = [
+  {title: 'Movie A', ratings: [4, 5, 3]},
+  {title: 'Movie B', ratings: [5, 5, 4]},
+  {title: 'Movie C', ratings: [3, 4, 2]}
+]
+let avgRatings = movieRatings.map((movie) => {
+  let averageRating = movie.ratings.reduce((sum, rating) => sum + rating, 0);
+  averageRating /= movie.ratings.length;
+  return {...movie, averageRating};
+})
+console.log(avgRatings);
