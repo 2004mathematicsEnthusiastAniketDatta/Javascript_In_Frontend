@@ -953,3 +953,5 @@ console.log(bindedGreet);
 person1.greet.apply(person2); //Hello Hitesh
 
 
+
+
