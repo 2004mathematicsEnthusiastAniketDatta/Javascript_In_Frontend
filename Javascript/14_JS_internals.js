@@ -1,561 +1,516 @@
-const obj = {
-    name: "John",
-    greet: function() {
-        console.log(`Hello, ${this.name}`);
-    },
-    greetArrow: () => {
-        console.log(`Hello, ${this.name}`);
-    }
+/**
+ * JAVASCRIPT 
+ * =======================================
+ * 
+ * Author: Aniket Datta
+ * 
+ * This file explains the core internals of JavaScript, including:
+ * - JavaScript Engine & Execution Context
+ * - Memory Management & Garbage Collection
+ * - Event Loop & Asynchronous JavaScript
+ * - Prototype Chain & Inheritance
+ * - Closures & Lexical Environment
+ * - Hoisting & TDZ (Temporal Dead Zone)
+ * - 'this' Keyword & Binding
+ */
+
+// =====================================================
+// SECTION 1: JAVASCRIPT ENGINE & EXECUTION CONTEXT
+// =====================================================
+
+/**
+ * JavaScript is an interpreted language, executed by a JS Engine
+ * (like V8 in Chrome, SpiderMonkey in Firefox, etc.)
+ * 
+ * The JS Engine has two main components:
+ * 1. Memory Heap - where memory allocation happens
+ * 2. Call Stack - where your code is executed (execution context)
+ */
+
+// Example demonstrating execution context
+console.log("1. Global context execution starts");
+
+function firstFunction() {
+  console.log("3. First function execution context");
+  secondFunction();
+  console.log("5. Back to first function context");
 }
-console.log('Hello');
-// setTimeout(//() => {
-// //     console.log(obj.greet.bind(obj)()); //     // This will correctly log "Hello, John" after 2 seconds
-// // }, 1000); // waits for 1 second before executing the function
-// obj.greet.bind(obj)// This will correctly log "Hello, John" after 2 seconds
-// , 1000); // waits for 1 second before executing the function
 
-setTimeout(obj.greet.bind(obj), 1000); // waits for 1 second after the call stack is empty 
-
-console.log('Welcome to the world of JavaScript'); //2
-
-//Event Loop
-// setTimeout(() => {
-//     console.log("Hello World");
-// }, 1000); // waits for 1 second before executing the function
-// setTimeout(() => {
-//     console.log("Javascript is awesome");
-// }, 0); // waits for 0 seconds from the time all other lines of code are executed before executing the function
-// setTimeout(() => {
-//     console.log("Hello World");
-// }, 1000); // waits for 1 second before executing the function
-// setTimeout(() => {
-//     console.log("Javascript is awesome");
-// }, 0); // waits for 0 seconds from the time all other lines of code are executed before executing the function
-// setTimeout(() => {
-//     console.log("Hello World");
-// }, 1000); // waits for 1 second before executing the function
-
-/* # JavaScript Internals Explained
-
-Looking at your code, I can explain the core JavaScript internals demonstrated here, particularly regarding execution context, `this` binding, and the event loop.
-
-## Execution Context and `this` Binding
-
-```javascript
-const obj = {
-    name: "John",
-    greet: function() {
-        console.log(`Hello, ${this.name}`);
-    },
-    greetArrow: () => {
-        console.log(`Hello, ${this.name}`);
-    }
+function secondFunction() {
+  console.log("4. Second function execution context");
 }
-```
 
-This code demonstrates two critical concepts:
+console.log("2. Still in global execution context");
+firstFunction();
+console.log("6. Back to global execution context");
 
-1. **Regular Functions vs Arrow Functions**: 
-   - Regular functions (`greet`) have their own `this` context that's determined by how they're called
-   - Arrow functions (`greetArrow`) inherit `this` from their surrounding lexical scope
+/**
+ * EXPLANATION: When this code runs, the JavaScript engine:
+ * 1. Creates a Global Execution Context (GEC)
+ * 2. Puts the GEC on the call stack
+ * 3. Executes code line by line
+ * 4. When firstFunction() is called, creates a new execution context for it
+ * 5. Inside firstFunction, secondFunction() creates another execution context
+ * 6. When secondFunction completes, its context is popped off the stack
+ * 7. Execution returns to firstFunction context
+ * 8. When firstFunction completes, back to global context
+ */
 
-If you were to call `obj.greet()`, it would output "Hello, John" because when called as a method, `this` refers to the object.
+// =====================================================
+// SECTION 2: MEMORY MANAGEMENT & GARBAGE COLLECTION
+// =====================================================
 
-However, `obj.greetArrow()` would output "Hello, undefined" because arrow functions don't have their own `this` - they capture the `this` value from the enclosing scope (global scope in this case).
+/**
+ * JavaScript handles memory management automatically through a process
+ * called Garbage Collection. The main algorithm is "Mark and Sweep":
+ * 
+ * 1. The garbage collector identifies all "root" objects (global variables)
+ * 2. It marks all roots and their references as "active"
+ * 3. Anything not marked is considered garbage and is swept away
+ */
 
-## Function Binding and Event Loop
+// Example demonstrating memory allocation
+let user = {
+  name: "John",
+  age: 30,
+  address: {
+    city: "New York",
+    zip: 10001
+  }
+};
 
-```javascript
-setTimeout(obj.greet.bind(obj), 1000);
-```
+// This creates a memory leak (circular reference)
+const createMemoryLeak = () => {
+  let a = {};
+  let b = {};
+  a.ref = b;
+  b.ref = a;  // Circular reference
+  
+  return () => {
+    console.log(a, b); // Keeps references alive even after function exits
+  };
+};
 
-This line demonstrates:
+const potentialLeak = createMemoryLeak();
 
-1. **Function binding**: `.bind(obj)` creates a new function with `this` permanently set to `obj`, preventing context loss
-2. **Asynchronous execution**: `setTimeout` schedules execution after the call stack is empty and timer expires
+// Modern GC algorithms can detect and clean up circular references
+// But this is a simplification of how memory leaks can happen
 
-## JavaScript's Execution Model
+// Best practice: Remove references when done
+user = null;  // Now the object can be garbage collected
 
-JavaScript executes code in this order:
+/**
+ * MEMORY LIFECYCLE:
+ * 1. Allocate memory - JavaScript does this when you declare variables
+ * 2. Use the memory - Read/write operations
+ * 3. Release memory - Done automatically by garbage collector
+ */
 
-1. **Creation Phase**: Allocates memory for variables and functions (hoisting)
-2. **Execution Phase**: Runs code line-by-line
-3. **Call Stack**: Tracks function execution in LIFO order
-4. **Event Loop**: Manages asynchronous operations
+// =====================================================
+// SECTION 3: EVENT LOOP & ASYNCHRONOUS JAVASCRIPT
+// =====================================================
 
-Your code would execute as:
-1. Define `obj`
-2. Log "Hello"
-3. Schedule the bound function for execution in 1 second
-4. Log "Welcome to the world of JavaScript"
-5. **After 1 second**: Call the bound `greet` function, which logs "Hello, John"
+/**
+ * JavaScript is single-threaded but can handle asynchronous operations
+ * through the Event Loop architecture:
+ * 
+ * Components:
+ * - Call Stack: Executes code
+ * - Web APIs: Browser capabilities (fetch, setTimeout, DOM, etc.)
+ * - Callback Queue: Holds callbacks from async operations
+ * - Microtask Queue: Higher priority queue (Promises, queueMicrotask)
+ * - Event Loop: Checks if call stack is empty, then moves callbacks
+ */
 
-## Event Loop in Detail
+console.log("A: Synchronous operation starts");
 
-The event loop is fundamental to JavaScript's non-blocking nature:
+// Macrotask - goes to Callback Queue
+setTimeout(() => {
+  console.log("C: setTimeout callback (macrotask)");
+}, 0);
 
-1. **Call Stack**: Executes synchronous code
-2. **Callback Queue**: Holds ready-to-execute callbacks
-3. **Microtask Queue**: Higher priority queue for promises
-4. **Event Loop**: Checks if call stack is empty, then transfers callbacks
+// Microtask - goes to Microtask Queue (higher priority)
+Promise.resolve()
+  .then(() => console.log("B: Promise resolution (microtask)"));
 
-Your commented code with multiple `setTimeout` calls would demonstrate how the event loop processes timed callbacks in order of their timeout completion, not in the order they were declared.
+console.log("D: Synchronous operation ends");
 
-This architecture is what makes JavaScript ideal for handling numerous concurrent operations despite being single-threaded.*/
+/**
+ * OUTPUT ORDER: A, D, B, C
+ * 
+ * EXPLANATION:
+ * 1. "A" logs immediately on the call stack
+ * 2. setTimeout schedules callback in Web API, later moves to Callback Queue
+ * 3. Promise resolves and its .then callback goes to Microtask Queue
+ * 4. "D" logs immediately on the call stack
+ * 5. Call stack empties
+ * 6. Event Loop checks Microtask Queue first → "B" logs
+ * 7. Event Loop checks Callback Queue → "C" logs
+ */
 
-/* So you may know that your code somehow compiles and executes in your browser to display the beautiful web application you’ve built. But are you aware of all the components that come into play to enable the output?
+// =====================================================
+// SECTION 4: PROTOTYPE CHAIN & INHERITANCE
+// =====================================================
 
-Let’s dive a little into JavaScript behind the scenes. The abstract part that you can’t exactly see.
+/**
+ * JavaScript uses prototypal inheritance rather than classical inheritance.
+ * Each object has an internal link to another object called its prototype.
+ */
 
-Why should a seemingly abstract subject matter to you? An understanding of the inner workings of JavaScript allows you to explore the language beyond the surface level and from a deeper perspective.
+// Constructor function
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
 
-It provides contextual information on the language and how the JavaScript engine optimizes code. This will give you some important foundational knowledge which shapes the way you write code. It also helps you write more efficient, scalable, and maintainable code.
+// Adding method to prototype (shared across all instances)
+Person.prototype.greet = function() {
+  return `Hello, my name is ${this.name}`;
+};
 
-The JavaScript Engine
-ImageJavaScript Engine showing the Call stack and the Heap
+// Creating instances
+const alice = new Person("Alice", 28);
+const bob = new Person("Bob", 32);
 
-The JavaScript engine is simply a computer program that interprets JavaScript code. The engine is responsible for executing the code.
+console.log(alice.greet());  // "Hello, my name is Alice"
+console.log(bob.greet());    // "Hello, my name is Bob"
 
-Every major browser has a JavaScript engine that executes JavaScript code. The most popular one is the Google Chrome V8 engine. Google’s V8 powers Google Chrome and Node.js, a back-end JavaScript runtime environment used to build server-side applications.
+// Inheritance using prototypes
+function Employee(name, age, role) {
+  // Call parent constructor
+  Person.call(this, name, age);
+  this.role = role;
+}
 
-Other major browser engines include:
+// Set up prototype chain - Employee inherits from Person
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;  // Fix constructor reference
 
-SpiderMonkey developed by Mozilla for Firefox
-JavaScriptCore which powers the Safari browser
-Chakra which powers Internet Explorer
-Any JavaScript engine typically contains a call stack and a heap. The call stack is where the code is executed. The heap is an unstructured memory pool that stores all the objects needed for the application.
+// Add method specific to Employee
+Employee.prototype.describe = function() {
+  return `${this.greet()}. I work as a ${this.role}.`;
+};
 
-Since the computer’s processor only understands binary, 0’s and 1’s, the code has to be translated to 0’s and 1’s.
+const charlie = new Employee("Charlie", 35, "Developer");
+console.log(charlie.describe());  // "Hello, my name is Charlie. I work as a Developer."
 
-When a code snippet passes into the engine, the code is initially parsed, that is read. The code is subsequently parsed to a data structure called the abstract syntax tree (AST). The resulting tree is then used to create machine codes.
+/**
+ * PROTOTYPE CHAIN EXPLAINED:
+ * 1. When you access a property on an object, JS first looks on the object itself
+ * 2. If not found, it looks on the object's prototype
+ * 3. This continues up the prototype chain until found or null is reached
+ * 
+ * Modern approach: Use class syntax (syntactic sugar over prototypes)
+ */
 
-Execution happens in the JavaScript engine call stack using the execution context. This is the environment where JavaScript code is executed.
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  
+  speak() {
+    return `${this.name} makes a sound`;
+  }
+}
 
-ImageA diagram illustration showing the JavaScript execution process
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+  
+  speak() {
+    return `${this.name} barks`;
+  }
+}
 
-The JavaScript Runtime
-Think of the JavaScript runtime as the house that encompasses all the components needed to run JavaScript. This house comprises the JavaScript engine, Web APIs, and the callback queue.
+const rex = new Dog("Rex", "German Shepherd");
+console.log(rex.speak());  // "Rex barks"
 
-Web APIs are functionalities that are provided to the engine but are not part of the JavaScript language. They are accessible to the engine through the browser and help access data or enhance browser functionality. Examples are the Document Object Model (DOM) and Fetch APIs.
+// =====================================================
+// SECTION 5: CLOSURES & LEXICAL ENVIRONMENT
+// =====================================================
 
-ImageA diagram of JavaScript Runtime in the Browser containing the JavaScript Engine, WEB APIs, and the Callback Queue
+/**
+ * A closure is the combination of a function and the lexical environment 
+ * within which that function was declared. This allows functions to 
+ * "remember" their creation context.
+ */
 
-The callback queue includes callback functions that are ready to be executed. The callback queue ensures that callbacks are executed in the First-In-First-Out (FIFO) method and they get passed into the stack when it’s empty.
+function createCounter() {
+  let count = 0;  // Private variable in the lexical scope
+  
+  return {
+    increment: function() {
+      count++;
+      return count;
+    },
+    decrement: function() {
+      count--;
+      return count;
+    },
+    getCount: function() {
+      return count;
+    }
+  };
+}
 
-The browser runtime and Node.js are examples of runtime environments.
+const counter = createCounter();
+console.log(counter.increment());  // 1
+console.log(counter.increment());  // 2
+console.log(counter.decrement());  // 1
+console.log(counter.getCount());   // 1
 
-When JavaScript executes within a web browser it is operating within the browser’s runtime environment. The browser runtime environment provides access to the DOM which enables interaction with web page elements, handling events, and manipulating the page structure.
+/**
+ * CLOSURE EXPLAINED:
+ * 1. When createCounter executes, it creates a new lexical environment with 'count'
+ * 2. The functions increment, decrement, getCount "close over" this environment
+ * 3. When createCounter finishes, its scope normally would be garbage collected
+ * 4. But since these functions maintain references to that scope, it stays alive
+ * 5. The 'count' variable persists and is accessible only through these functions
+ */
 
-Node.js provides a server-side runtime environment for executing JavaScript outside the browser. Because it executes JavaScript outside the browser, it does not have access to the web APIs. Instead, the Node.js runtime environment replaces it with something called C++ bindings and the thread pool.
+// Practical example: Memoization with closure
+function memoize(fn) {
+  const cache = {};  // Private cache in closure
+  
+  return function(...args) {
+    const key = JSON.stringify(args);
+    
+    if (cache[key] === undefined) {
+      console.log("Computing result...");
+      cache[key] = fn(...args);
+    } else {
+      console.log("Returning from cache...");
+    }
+    
+    return cache[key];
+  };
+}
 
-JavaScript Optimization Strategies
-Modern JavaScript engines have some optimization strategies put in place to enhance the performance of code execution. These optimizations occur dynamically during the execution process. Let's look at some of these strategies.
+const expensiveOperation = (a, b) => {
+  // Simulate expensive computation
+  console.log("Performing expensive calculation");
+  return a * b;
+};
 
-Just-in-Time compilation
-The process that involves the translation of JavaScript code into machine code occurs using compilation and interpretation.
+const memoizedOperation = memoize(expensiveOperation);
 
-In compilation, the entire source code is converted into machine code at once and written into a binary file to be executed by the computer.
+console.log(memoizedOperation(4, 5));  // Computes: 20
+console.log(memoizedOperation(4, 5));  // Returns from cache: 20
 
-ImageA diagram showing the code compilation process
+// =====================================================
+// SECTION 6: HOISTING & TEMPORAL DEAD ZONE
+// =====================================================
 
-In contrast, during interpretation, the interpreter goes through the source code and interprets it line by line, executing each line as it encounters it.
+/**
+ * Hoisting is JavaScript's behavior of moving declarations to the top
+ * of their containing scope during the compilation phase.
+ */
 
-ImageA diagram showing the code interpretation process
-
-JavaScript used to be an interpreted language, but interpreted languages are slower compared to compiled languages.
-
-In order to optimize the performance of web applications, JavaScript combines both compilation and interpretation. This is called Just-in-Time compilation. This method compiles the entire code into machine code all at once and executes it.
-
-ImageA diagram showing Just-in-Time compilation of code
-
-Just-in-Time compilation involves the same two processes as regular compilation, but here the machine code isn’t written into a binary file. The code is also executed right away after compilation.
-
-This has had a significant impact on the speed of code execution in JavaScript. So hopefully this helps dispel the notion that JavaScript is a purely interpreted language.
-
-To fully optimize JavaScript code, the engine first creates an unoptimized version of the machine code so it can start executing immediately. While that is ongoing, the code is being re-optimized and recompiled in the background of the currently running program execution. This is done multiple times to produce the final, most optimized version.
-
-The process of parsing, compilation, and execution happens in some special thread in the engine that can’t be accessed from the code.
-
-What is Inlining?
-Inlining is another optimization technique JavaScript employs to improve performance and speed.
+// Function declarations are fully hoisted
+console.log(add(2, 3));  // Works! Outputs: 5
 
 function add(a, b) {
   return a + b;
 }
 
-let result = 0;
-result = result + 5;
-result = result + 3;
+// Variables declared with 'var' are hoisted but initialized as undefined
+console.log(hoistedVar);  // undefined (not an error)
+var hoistedVar = 10;
 
-console.log(result); //
-In this snippet, the original add() function is not directly called. Instead, the code inside the function return a + b; is inserted at the call site.
-
-This optimization is done especially for functions that are called repeatedly. The JavaScript engine will run the function as it normally would. But as the function gets called often, the engine replaces the function call with the actual code of the function at the call site. This helps to prevent several function calls and improve performance.
-
-Performance Considerations
-Several factors affect the performance of your web application. As the JavaScript engine employs some strategies to ensure optimization, there are also some best practices to be taken into consideration by developers for efficient execution.
-
-Techniques such as minimizing DOM manipulation and reducing function calls enhance code performance.
-
-Frequent access and interaction to the DOM slows down the rendering of web pages and contributes to performance lag. Since you can’t altogether avoid interacting with the DOM, you can minimize interaction by batching DOM updates to reduce overhead.
-
-Additionally, reducing function calls takes up the performance a notch. By reducing function calls, you streamline your code and make it more efficient making your JavaScript applications faster and more responsive.
-
-// Inefficient code with unnecessary function calls
-function calculateTotal(a, b, c) {
-  return addNumbers(a, b) + multiplyNumbers(c, b);
+// Variables declared with 'let' and 'const' are hoisted but not initialized
+// They're in the Temporal Dead Zone (TDZ) until declaration is reached
+try {
+  console.log(blockVar);  // This will throw ReferenceError
+} catch(e) {
+  console.log("Error: Can't access 'blockVar' before initialization");
 }
-function addNumbers(x, y) {
-  return x + y;
-}
-function multiplyNumbers(x, y) {
-  return x * y;
-}
-// Improved code with reduced function calls
-function calculateTotal(a, b, c) {
-  const sum = a + b;
-  return sum + c * b;
-}
-console.log(calculateTotal(2, 3, 4)); // Output: 23
-In the inefficient code, the calculateTotal() function makes separate function calls to addNumbers() and multiplyNumbers(). This causes function call overhead.
 
-In the improved code, the function calls are reduced by directly performing the addition and multiplication operations within the calculateTotal() function. By reducing function calls, the code becomes more efficient and improves execution speed.
+let blockVar = 20;
+console.log(blockVar);  // 20 - Now it works
 
-Future JavaScript Developments and Trends
-There will continue to be improvements and advancements in JavaScript engines and runtime environments. These changes are geared towards improving the performance of web applications.
+/**
+ * TEMPORAL DEAD ZONE (TDZ) EXPLAINED:
+ * - The period between entering scope and being declared
+ * - During this time, the variable exists but cannot be accessed
+ * - This helps catch errors and enforce better coding practices
+ */
 
-One such advancement is the rise of WebAssembly. WebAssembly brings near-native performance to web applications and supports multiple languages. It opens up new possibilities for performance optimization and execution speed.
+// =====================================================
+// SECTION 7: 'THIS' KEYWORD & BINDING
+// =====================================================
 
-It is important for JavaScript developers to stay updated with these trends and adapt new coding best practices accordingly.
+/**
+ * 'this' refers to the execution context of a function.
+ * Its value depends on how the function is called, not where it's defined.
+ */
 
-Conclusion
-So many processes are involved in how your JavaScript code is being parsed until it renders a functional web application.
+// Example 1: Global context
+console.log(this);  // In browser: Window object, in Node: global or {}
 
-This article provides a high-level overview of the main concepts. It explains how the JavaScript engine executes code, the runtime, and its components. It also goes on to explain optimization strategies and highlight performance considerations.
-
-Understanding how JavaScript operates behind the scenes shapes the way developers approach problems and write more efficient codes. It also helps them stay ahead of the learning curve and adapt easily to future changes in JavaScript features. 
-
-All JavaScript code needs to be hosted and run in some kind of environment. In most cases, that environment would be a web browser.
-
-For any piece of JavaScript code to be executed in a web browser, a lot of processes take place behind the scenes. In this article, we'll take a look at everything that happens behind the scenes for JavaScript code to run in a web browser.
-
-Before we dive in, here are some prerequisites to familiarize yourself with, because we'll use them often in this article.
-
-Parser: A Parser or Syntax Parser is a program that reads your code line-by-line. It understands how the code fits the syntax defined by the Programming Language and what it (the code) is expected to do.
-JavaScript Engine: A JavaScript engine is simply a computer program that receives JavaScript source code and compiles it to the binary instructions (machine code) that a CPU can understand. JavaScript engines are typically developed by web browser vendors, and each major browser has one. Examples include the V8 engine for Google chrome, SpiderMonkey for Firefox, and Chakra for Internet Explorer.
-Function Declarations: These are functions that are assigned a name.
-function doSomething() { //here "doSomething" is the function's name
-statements; 
-}
-Function Expressions: These are anonymous functions, that is functions without a function name like js function () { statements }. They are usually used in statements, like assigning a function to a variable. let someValue = function () { statements }.
-Now, that we've gotten those out of the way, let's dive in.
-
-How JavaScript Code Gets Executed
-For does who don't know, the browser doesn't natively understand the high-level JavaScript code that we write in our applications. It needs to be converted into a format that the browser and our computers can understand – machine code.
-
-While reading through HTML, if the browser encounters JavaScript code to run via a <script> tag or an attribute that contains JavaScript code like onClick, it sends it to its JavaScript engine.
-
-The browser's JavaScript engine then creates a special environment to handle the transformation and execution of this JavaScript code. This environment is known as the Execution Context.
-
-The Execution Context contains the code that's currently running, and everything that aids in its execution.
-
-During the Execution Context run-time, the specific code gets parsed by a parser, the variables and functions are stored in memory, executable byte-code gets generated, and the code gets executed.
-
-There are two kinds of Execution Context in JavaScript:
-
-Global Execution Context (GEC)
-Function Execution Context (FEC)
-Let's take a detailed look at both.
-
-Global Execution Context (GEC)
-Whenever the JavaScript engine receives a script file, it first creates a default Execution Context known as the Global Execution Context (GEC).
-
-The GEC is the base/default Execution Context where all JavaScript code that is not inside of a function gets executed.
-
-For every JavaScript file, there can only be one GEC.
-
-Function Execution Context (FEC)
-Whenever a function is called, the JavaScript engine creates a different type of Execution Context known as a Function Execution Context (FEC) within the GEC to evaluate and execute the code within that function.
-
-Since every function call gets its own FEC, there can be more than one FEC in the run-time of a script.
-
-How are Execution Contexts Created?
-Now that we are aware of what Execution Contexts are, and the different types available, let's look at how the are created.
-
-The creation of an Execution Context (GEC or FEC) happens in two phases:
-
-Creation Phase
-Execution Phase
-Creation Phase
-In the creation phase, the Execution Context is first associated with an Execution Context Object (ECO). The Execution Context Object stores a lot of important data which the code in the Execution Context uses during its run-time.
-
-The creation phase occurs in 3 stages, during which the properties of the Execution Context Object are defined and set. These stages are:
-
-Creation of the Variable Object (VO)
-Creation of the Scope Chain
-Setting the value of the this keyword
-Let us go over each phase in detail.
-
-Creation Phase: Creation Of The Variable Object (VO)
-The Variable Object (VO) is an object-like container created within an Execution Context. It stores the variables and function declarations defined within that Execution Context.
-
-In the GEC, for each variable declared with the var keyword, a property is added to VO that points to that variable and is set to 'undefined'.
-
-Also, for every function declaration, a property is added to the VO, pointing to that function, and that property is stored in memory. This means that all the function declarations will be stored and made accessible inside the VO, even before the code starts running.
-
-The FEC, on the other hand, does not construct a VO. Rather, it generates an array-like object called the 'argument' object, which includes all of the arguments supplied to the function. Learn more about the argument object here.
-
-This process of storing variables and function declaration in memory prior to the execution of the code is known as Hoisting. Since this is an important concept, we'll talk about it briefly before moving on to the next stage.
-
-Hoisting in JavaScript
-Function and variable declarations are hoisted in JavaScript. This means that they are stored in memory of the current Execution Context's VO and made available within the Execution Context even before the execution of the code begins.
-
-Function Hoisting
-In most scenarios when building an application, developers can choose to define functions at the top of a script, and only later call them down the code, like so:
-
-Image
-
-However, due to hoisting, the opposite will still work. Where we can call functions first then define them later down the script.
-
-Image
-
-In the code above, the getAge function declaration will be stored in the memory of the VO, making it available for use even before it is defined.
-
-Variable Hoisting
-Variables initialized with the var keyword are stored in the memory of the current Execution Context's VO as a property, and initialized with the value undefined. This means, unlike functions, trying to access the value of the variable before it is defined will result in undefined.
-
-Image
-
-Ground Rules of Hoisting
-Hoisting only works for function declarations, not expressions. Here is an example of a function expression where the code execution will break.
-
-getAge(1990); 
-var getAge = function (yearOfBirth) {
-console.log(new Date().getFullYear - yearOfBirth) 
+// Example 2: Object method
+const user1 = {
+  name: "David",
+  greet() {
+    console.log(`Hello, I am ${this.name}`);
+  }
 };
-The code execution breaks, because with function expressions, getAge will be hoisted as a variable not as a function. And with variable hoisting, its value will be set to undefined. That's why we get the error:
 
-Image
+user1.greet();  // "Hello, I am David" - 'this' is user1 object
 
-Also, variable hoisting does not work for variables initialized with the let or const keyword. Trying to access a variable ahead of declaration and use the let and const keywords to declare it later will result in a ReferenceError.
-
-In this case, they will be hoisted but not assigned with the default value of undefined. js console.log(name); let name = "Victor"; will throw the error:
-
-Image
-
-Creation Phase: Creation of The Scope Chain
-After the creation of the Variable Object (VO) comes the creation of the Scope Chain as the next stage in the creation phase of an Execution Context.
-
-Scope in JavaScript is a mechanism that determines how accessible a piece of code is to other parts of the codebase. Scope answers the questions: from where can a piece of code be accessed? From where can't it be accessed? What can access it, and what can't?
-
-Each Function Execution Context creates its scope: the space/environment where the variables and functions it defined can be accessed via a process called Scoping.
-
-This means the position of something within a codebase, that is, where a piece of code is located.
-
-When a function is defined in another function, the inner function has access to the code defined in that of the outer function, and that of its parents. This behavior is called lexical scoping.
-
-However, the outer function does not have access to the code within the inner function.
-
-This concept of scope brings up an associate phenomenon in JavaScript called closures. These are when inner functions that always get access to the code associated with the outer functions, even after the execution of the outer functions is complete. You can learn more closures here.
-
-Let's look at some examples to get a better understanding:
-
-first-scope.png
-
-On the right is the Global Scope. It is the default scope created when a .js script is loaded and is accessible from all functions throughout the code.
-The red box is the scope of the first function, which defines the variable b = 'Hello!' and the second function.
-Image
-
-In green is the scope of the second function. There is a console.log statement which is to print the variables a, b and c.
-Now the variables a and b aren't defined in the second function, only c. However, due to lexical scoping, it has access to the scope of the function it sits in and that of its parent.
-
-In running the code, the JS engine will not find the variable b in the scope of the second function. So, it looks up into the scope of its parents, starting with the first function. There it finds the variable b = 'Hello'. It goes back to the second function and resolves the b variable there with it.
-
-Same process for the a variable. The JS engine looks up through the scope of all its parents all the way to the scope of the GEC, resolving its value in the second function.
-
-This idea of the JavaScript engine traversing up the scopes of the execution contexts that a function is defined in in order to resolve variables and functions invoked in them is called the scope chain.
-
-Scope chain
-
-Only when the JS engine can't resolve a variable within the scope chain does it stop executing and throws an error.
-
-However, this doesn't work backward. That is, the global scope will never have access to the inner function’s variables unless they are returned from the function.
-
-The scope chain works as a one-way glass. You can see the outside, but people from the outside cannot see you.
-
-And that is why the red arrow in the image above is pointing upwards because that is the only direction the scope chains goes.
-
-Creation Phase: Setting The Value of The "this" Keyword
-The next and final stage after scoping in the creation phase of an Execution Context is setting the value of the this keyword.
-
-The JavaScript this keyword refers to the scope where an Execution Context belongs.
-
-Once the scope chain is created, the value of 'this' is initialized by the JS engine.
-
-"this" in The Global Context
-In the GEC (outside of any function and object), this refers to the global object — which is the window object.
-
-Thus, function declarations and variables initialized with the var keyword get assigned as properties and methods to the global object – window object.
-
-This means that declaring variables and functions outside of any function, like this:
-
-var occupation = "Frontend Developer"; 
-
-function addOne(x) { 
-    console.log(x + 1) 
+// Example 3: Function called on its own
+function standalone() {
+  console.log(this);  // In browser: Window object, in strict mode: undefined
 }
-Is exactly the same as:
 
-window.occupation = "Frontend Developer"; 
-window.addOne = (x) => { 
-console.log(x + 1)
+standalone();
+
+// Example 4: Event handlers
+// document.querySelector("button").addEventListener("click", function() {
+//   console.log(this);  // 'this' would be the button element
+// });
+
+// Example 5: Arrow functions don't have their own 'this'
+const arrowTest = {
+  name: "Arrow",
+  regularMethod: function() {
+    console.log(`Regular method: ${this.name}`);
+    
+    // Arrow function inherits 'this' from surrounding scope
+    const arrowFunction = () => {
+      console.log(`Arrow function: ${this.name}`);
+    };
+    
+    arrowFunction();
+  }
 };
-Functions and variables in the GEC get attached as methods and properties to the window object. That's why the snippet below will return true.
 
-Image
+arrowTest.regularMethod();
+// Output:
+// Regular method: Arrow
+// Arrow function: Arrow
 
-"this" in Functions
-In the case of the FEC, it doesn't create the this object. Rather, it get's access to that of the environment it is defined in.
+// Methods to control 'this' binding
+const person1 = { name: "Alex" };
+const person2 = { name: "Beth" };
 
-Here that'll be the window object, as the function is defined in the GEC:
-
-var msg = "I will rule the world!"; 
-
-function printMsg() { 
-    console.log(this.msg); 
-} 
-
-printMsg(); // logs "I will rule the world!" to the console.
-In objects, the this keyword doesn't point to the GEC, but to the object itself. Referencing this within an object will be the same as:
-
-theObject.thePropertyOrMethodDefinedInIt;
-
-Consider the code example below:
-
-var msg = "I will rule the world!"; 
-const Victor = {
-    msg: "Victor will rule the world!", 
-    printMsg() { console.log(this.msg) }, 
-}; 
-
-Victor.printMsg(); // logs "Victor will rule the world!" to the console.
-The code logs "Victor will rule the world!" to the console, and not "I will rule the world!" because in this case, the value of the this keyword the function has access to is that of the object it is defined in, not the global object.
-
-With the value of the this keyword set, all the properties of the Execution Context Object have been defined. Leading to the end of the creation phase, now the JS engine moves on to the execution phase.
-
-The Execution Phase
-Finally, right after the creation phase of an Execution Context comes the execution phase. This is the stage where the actual code execution begins.
-
-Up until this point, the VO contained variables with the values of undefined. If the code is run at this point it is bound to return errors, as we can't work with undefined values.
-
-At this stage, the JavaScript engine reads the code in the current Execution Context once more, then updates the VO with the actual values of these variables. Then the code is parsed by a parser, gets transpired to executable byte code, and finally gets executed.
-
-JavaScript Execution Stack
-The Execution Stack, also known as the Call Stack, keeps track of all the Execution Contexts created during the life cycle of a script.
-
-JavaScript is a single-threaded language, which means that it is capable of only executing a single task at a time. Thus, when other actions, functions, and events occur, an Execution Context is created for each of these events. Due to the single-threaded nature of JavaScript, a stack of piled-up execution contexts to be executed is created, known as the Execution Stack.
-
-When scripts load in the browser, the Global context is created as the default context where the JS engine starts executing code and is placed at the bottom of the execution stack.
-
-The JS engine then searches for function calls in the code. For each function call, a new FEC is created for that function and is placed on top of the currently executing Execution Context.
-
-The Execution Context at the top of the Execution stack becomes the active Execution Context, and will always get executed first by the JS engine.
-
-As soon as the execution of all the code within the active Execution Context is done, the JS engine pops out that particular function's Execution Context of the execution stack, moves towards the next below it, and so on.
-
-To understand the working process of the execution stack, consider the code example below:
-
-var name = "Victor";
-
-function first() {
-  var a = "Hi!";
-  second();
-  console.log(`${a} ${name}`);
+function introduce(greeting, punctuation) {
+  console.log(`${greeting}, I am ${this.name}${punctuation}`);
 }
 
-function second() {
-  var b = "Hey!";
-  third();
-  console.log(`${b} ${name}`);
+// Using call - invokes function with specified 'this' and arguments
+introduce.call(person1, "Hi", "!");  // "Hi, I am Alex!"
+
+// Using apply - like call but takes arguments as array
+introduce.apply(person2, ["Hello", "."]);  // "Hello, I am Beth."
+
+// Using bind - returns a new function with 'this' permanently bound
+const introduceBeth = introduce.bind(person2);
+introduceBeth("Hey", "?");  // "Hey, I am Beth?"
+
+/**
+ * 'THIS' BINDING RULES (in order of precedence):
+ * 1. 'new' binding: 'this' is the new object when constructor is called with 'new'
+ * 2. Explicit binding: Using call, apply, or bind
+ * 3. Implicit binding: 'this' is the object that owns the method
+ * 4. Default binding: 'this' is global object (or undefined in strict mode)
+ * 5. Arrow functions: Inherit 'this' from surrounding lexical context
+ */
+
+// =====================================================
+// SECTION 8: ADVANCED OPTIMIZATIONS & PATTERNS
+// =====================================================
+
+/**
+ * Modern JavaScript engines use several optimization techniques:
+ * - Just-In-Time (JIT) compilation
+ * - Inline caching
+ * - Hidden classes
+ */
+
+// Hidden Classes - Keep object structures consistent for optimization
+// Good pattern (V8 optimizes this well):
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
 }
 
-function third() {
-  var c = "Hello!";
-  console.log(`${c} ${name}`);
-}
+const p1 = new Point(10, 20);
+const p2 = new Point(30, 40);
 
-first();
-First, the script is loaded into the JS engine.
+// Bad pattern (creates different hidden classes):
+const badPoint1 = {};
+badPoint1.x = 10;
+badPoint1.y = 20;
 
-After it, the JS engine creates the GEC and places it at the base of the execution stack.
+const badPoint2 = {};
+badPoint2.y = 30;  // Different order
+badPoint2.x = 40;
 
-Image
+// Function inlining and specialized optimization
+// Hot functions (called many times) get optimized
 
-The name variable is defined outside of any function, so it is in the GEC and stored in it's VO.
+// Module Pattern - Encapsulation using closures
+const calculator = (function() {
+  // Private
+  let result = 0;
+  
+  function validate(n) {
+    return typeof n === 'number';
+  }
+  
+  // Public API
+  return {
+    add(n) {
+      if (!validate(n)) throw new Error('Invalid number');
+      result += n;
+      return this;  // For chaining
+    },
+    subtract(n) {
+      if (!validate(n)) throw new Error('Invalid number');
+      result -= n;
+      return this;
+    },
+    getResult() {
+      return result;
+    }
+  };
+})();
 
-The same process occurs for the first, second, and third functions.
+console.log(
+  calculator
+    .add(5)
+    .subtract(2)
+    .add(10)
+    .getResult()  // 13
+);
 
-Don't get confused as to why they functions are still in the GEC. Remember, the GEC is only for JavaScript code (variables and functions) that are not inside of any function. Because they were not defined within any function, the function declarations are in the GEC. Make sense now 😃?
+/**
+ * ADDITIONAL CONCEPTS WORTH EXPLORING:
+ * - WeakMap and WeakSet for better memory management
+ * - Web Workers for parallel processing
+ * - SharedArrayBuffer for shared memory parallelism
+ * - JavaScript typed arrays for performance-critical operations
+ * - JavaScript engines' optimization techniques like function inlining
+ * - JavaScript decorators (experimental)
+ * - Proxy and Reflect for metaprogramming
+ */
 
-When the JS engine encounters the first function call, a new FEC is created for it. This new context is placed on top of the current context, forming the so-called Execution Stack.
+// =====================================================
+// CONCLUSION
+// =====================================================
 
-Image
-
-For the duration of the first function call, its Execution Context becomes the active context where JavaScript code is first executed.
-
-In the first function the variable a = 'Hi!' gets stored in its FEC, not in the GEC.
-
-Next, the second function is called within the first function.
-
-The execution of the first function will be paused due to the single-threaded nature of JavaScript. It has to wait until its execution, that is the second function, is complete.
-
-Again the JS engine sets up a new FEC for the second function and places it at the top of the stack, making it the active context.
-
-Image
-
-The second function becomes the active context, the variable b = 'Hey!'; gets store in its FEC, and the third function is invoked within the second function. Its FEC is created and put on top of the execution stack.
-
-Image
-
-Inside of the third function the variable c = 'Hello!' gets stored in its FEC and the message Hello! Victor gets logged to the console.
-
-Hence the function has performed all its tasks and we say it returns. Its FEC gets removed from the top of the stack and the FEC of the second function which called the third function gets back to being the active context.
-
-Image
-
-Back in the second function, the message Hey! Victor gets logged to the console. The function completes its task, returns, and its Execution Context gets popped off the call stack.
-
-Image
-
-When the first function gets executed completely, the execution stack of the first function popped out from the stack. Hence, the control reaches back to the GEC of the code.
-
-Image
-
-And lastly, when the execution of the entire code gets completed, the JS engine removes the GEC from the current stack.
-
-Global Execution Context VS. Function Execution Context in JavaScript
-Since you've read all the way until this section, let's summarize the key points between the GEC and the FEC with the table below.
-
-GLOBAL EXECUTION CONTEXT	Function Execution Context
-Creates a Global Variable object that stores function and variables declarations.	Doesn't create a Global Variable object. Rather, it creates an argument object that stores all the arguments passed to the function.
-Creates the this object that stores all the variables and functions in the Global scope as methods and properties.	Doesn't create the this object, but has access to that of the environment in which it is defined. Usually the window object.
-Can't access the code of the Function contexts defined in it	Due to scoping, has access to the code(variables and functions) in the context it is defined and that of its parents
-Sets up memory space for variables and functions defined globally	Sets up memory space only for variables and functions defined within the function.
-Conclusion
-JavaScript's Execution Context is the basis for understanding many other fundamental concepts correctly.
-
-The Execution Context (GEC and FEC), and the call stack are the processes carried out under the hood by the JS engine that let our code run.
-
-Hope now you have a better understanding in which order your functions/code run and how JavaScript Engine treats them.
-
-As a developer, having a good understanding of these concepts helps you:
-
-Get a decent understanding of the ins and outs of the language.
-Get a good grasp of a language’s underlying/core concepts.
-Write clean, maintainable, and well-structured code, introducing fewer bugs into production.
-All this will make you a better developer overall.
-
-Hope you found this article helpful. Do share it with your friends and network, and feel free to connect with me on Twitter and my blog where I share a wide range of free educational articles and resources. This really motivates me to publish more.
-
-
-*/
+/**
+ * JavaScript internals are complex but understanding them provides:
+ * 1. Better debugging skills
+ * 2. Performance optimization abilities
+ * 3. Prevention of common pitfalls and bugs
+ * 4. Clean code architecture that works with the language, not against it
+ * 
+ * The JavaScript engine and runtime environment represent a sophisticated
+ * system that balances ease of use with powerful capabilities.
+ * 
+ * As you develop, remember that JavaScript's flexibility is both
+ * its greatest strength and its greatest challenge.
+ */
