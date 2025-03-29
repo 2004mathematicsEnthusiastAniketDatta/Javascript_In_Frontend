@@ -27,4 +27,26 @@ setTimeout(obj.greet,2*1000);
 // 8. In this example, even setTimeout(0) waits until all synchronous code completes
 //    before executing, which is why "Hello World" appears after "Namaste" and "Welcome"
 // 9. The obj.greet callback loses its original 'this' context in setTimeout,
-//    so 'this.name' becomes undefined when the function executes after 2 seconds
+//    so 'this.name' becomes undefined when the function executes after 2 seconds.
+//   To fix this, we can use an arrow function or bind the context explicitly.
+// 10. Using an arrow function to preserve context:
+setTimeout(() => obj.greet(), 2*1000); // This will correctly log "Hello, John" after 2 seconds
+// while (true) {
+//     console.log("Infinite loop");
+// }
+// This will block the call stack and prevent any other code from executing
+// This is a simple example of how setTimeout works in JavaScript and the Event Loop.
+// const abc=undefined;
+// function xyz(){
+//     //Create
+//     const abc=1;
+//     //Read
+//     console.log(abc);
+//     //Update
+//     abc=abc+1;
+//     console.log(abc);
+//     //Destroyed
+// }
+// xyz();
+// console.log(abc);
+
