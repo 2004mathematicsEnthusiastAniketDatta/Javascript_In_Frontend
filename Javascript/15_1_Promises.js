@@ -480,6 +480,10 @@ class OrderProcessor {
         }
       }
     });
+ //Web Application -> Website / Browser
+ // Server fetch -> Not an Instant Result
+ // Synchronization
+ // Asynchronous Operation
 
 
     
