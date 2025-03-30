@@ -514,3 +514,40 @@ console.log(
  * As you develop, remember that JavaScript's flexibility is both
  * its greatest strength and its greatest challenge.
  */
+
+console.log('Hi'); //Call Stack ->1 
+setTimeout(()=> console.log('Hello after 2s'),0)//8 //Anonymous function in CallBack Queue
+Promise.resolve().then(()=>{ //Promise in Microtask Queue -> Promise in Call Stack ->3
+  console.log('1. Promise has been resolved');//4//Promise in Microtask Queue -> Promise in Call Stack
+  Promise.resolve().then(()=>{//5 //Promise in Microtask Queue -> Promise in Call Stack
+  console.log('2. Promise has been resolved'); //Promise in Microtask Queue -> Promise in Call Stack
+  Promise.resolve().then(()=>{ //6
+  console.log('3. Promise has been resolved'); //Promise in Microtask Queue -> Promise in Call Stack
+  Promise.resolve().then(()=>{ //7
+  console.log('4. Promise has been resolved'); //Promise in Microtask Queue -> Promise in Call Stack
+});
+});
+});
+});
+
+console.log('BYE') //Call Stack ->2
+//rerender
+
+// There are two types of task queues in javascript.
+
+// Callback Task queue(MTQ)
+// Micro Task queue(CTQ)
+// The Callback Queue, also known as the Task Queue, is where asynchronous tasks such as event handlers, setTimeout callbacks, and I/O operations are queued for execution. These tasks are typically non-promise related.
+
+// The Micro Task Queue is a special queue that holds micro-tasks, which are small, short-lived tasks. Promises, mutation observations, and other similar asynchronous operations enqueue their callbacks into the Micro Task Queue.
+
+// Priority and Execution Order:
+
+// When the event loop runs, it first processes tasks from the Micro Task Queue before moving on to tasks in the Callback Queue.
+
+// This means that micro-tasks, like promises and mutation observations, are given priority over regular callback tasks. Even if both queues have tasks waiting, the event loop will always finish processing all micro-tasks before it starts working on tasks from the Callback Queue.
+
+// Understanding Task Starvation:
+
+// Now, imagine this: if micro tasks keep popping up without allowing other tasks a chance to run, what happens next? Well, in this scenario, the Callback Queue won’t get an opportunity to execute its tasks. This situation is what we call the starvation of tasks in the Callback Queue.
+
