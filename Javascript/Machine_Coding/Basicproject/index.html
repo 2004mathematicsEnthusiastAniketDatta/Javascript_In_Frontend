@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #292d35;
+            color: rgb(80, 64, 223);
+            font-family: Arial, sans-serif;
+        }
+        .clock-container {
+            text-align: center;
+        }
+        h1 {
+            font-size: 5em;
+            margin: 0;
+        }
+        p {
+            color: #ffffff;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <h1 id="time">00:00:00 AM</h1>
+        <p id="date">Loading Date.........</p>
+    </div>
+    <script>
+    `use strict`;
+    const updateClock = () => {
+    const timeElement = document.getElementById('time');
+    const dateElement = document.getElementById('date');
+    const now = new Date();
+    console.log(now);
+    const hours = now.getHours();
+    const hours12 = hours % 12 || 12; // Convert to 12-hour format 
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    //minutes < 10 ? `0${minutes}`: `${minutes}`;
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    //seconds < 10 ? `0${seconds}`: `${seconds}`;
+     const ampm = hours >= 12 ? 'P.M.' : 'A.M.';
+    timeElement.textContent = `${hours12}:${minutes}:${seconds} ${ampm}`;
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+     const date = now.toLocaleDateString('en-US', options);
+     dateElement.textContent = date;
+    console.log(event.toLocaleDateString(undefined, options));
+// Expected output (varies according to local timezone and default locale): Thursday, December 20, 2012
+// Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleDateString')
+//DOM getting refreshed because of .textContent because of Proxied object. 
+//
+}
+setInterval(updateClock, 1000);
+window.onload = () => {
+updateClock();
+};    
+</script>
+</body>
+</html>

@@ -29,13 +29,9 @@ function createArrayWithNegativeIndices(arr){
 let arr2 = createArrayWithNegativeIndices(arr);
 console.log(arr2[-1]); // 10
 arr2[-1] = 0; // Set the last element to 100
-console.log(arr2); // 010.0
-console.log(arr); // 010.0
- // Hence deep copy of arr2 is created
-
-
-
-
-
-
+console.log(arr2); // 0
+console.log(arr); // 0
+ // Proxy is neither a shallow copy nor a deep copy of the original object
+ //A Proxy appears to be a wrapper that intercepts operations on an object
 console.log( arr[-1]);
+
