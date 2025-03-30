@@ -551,3 +551,25 @@ console.log('BYE') //Call Stack ->2
 
 // Now, imagine this: if micro tasks keep popping up without allowing other tasks a chance to run, what happens next? Well, in this scenario, the Callback Queue won’t get an opportunity to execute its tasks. This situation is what we call the starvation of tasks in the Callback Queue.
 
+//Call Stack
+//console.log(`Age is: ${age}`);
+ // ReferenceError: Cannot access 'age' before initialization
+//Hoisting 
+console.log(`Age is ${Age}`); 
+//let Age = 20; Age was used before this was declared
+//Temporal Dead Zone (TDZ)
+var Age = 20;
+console.log(`Age is ${Age}`);
+//let age = 20; // Hoisted but not initialized
+// Global Execution Context (GEC)
+const age = 20; // After Temporal Dead Zone (TDZ) 
+console.log(`Age is: ${age}`); //Age is: 20 
+test();
+function test(){
+  let a = 20; //Local Execution Context (LEC)
+  console.log(`I am inside test function with ${a}`); //I am inside test function with 20
+}
+test();
+
+
+
