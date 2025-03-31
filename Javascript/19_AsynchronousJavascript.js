@@ -1,240 +1,210 @@
-// // # Understanding Synchronous Code in JavaScript
-
-// // Synchronous code in JavaScript executes line by line, in order, with each operation completing before the next one begins. This is the default behavior in JavaScript.
-
-// // ## Key Characteristics of Synchronous Code
-
-// // - **Sequential Execution**: Code runs in the order it's written
-// // - **Blocking**: Each operation blocks execution until it completes
-// // - **Single-threaded**: Only one operation executes at a time
-
-// // ## Example
-
-// // ```javascript
-// // console.log("First");
-// // console.log("Second");
-// // console.log("Third");
-// // ```
-
-// // In this example, "First" will always print before "Second", and "Second" before "Third".
-
-// // ## Real-world Implications
-
-// // Synchronous operations can cause problems when dealing with time-consuming tasks:
-
-// // ```javascript
-// // console.log("Starting...");
-// // // This would freeze the UI if executed synchronously
-// // const data = fetchDataFromServer(); // Blocking operation
-// // console.log("Data:", data);
-// // console.log("Finished!");
-// // ```
-
-// // This is why JavaScript also offers asynchronous patterns (callbacks, Promises, async/await) for operations that might take time, like:
-// // - Network requests
-// // - File operations
-// // - Timers/delays
-
-// // You could expand your active file to contrast synchronous vs asynchronous code patterns.
-
-// // Async -> Non-blocking code
-
-// import fs from 'fs';
-
-// console.log('Starting Program');
-
-// const contents = fs.readFileSync('hello.txt', 'utf-8');// Reading file synchronously
-
-// const lines = contents.split('\n'); // Splitting the contents into lines
-
-// const lineCount = lines.length; // Counting the number of lines
-
-// console.log('Number of lines:', lineCount);
-
-// const wordperline = lines.map(line => line.split(' ').length); // Counting the number of words per line
-
-// console.log('Words per line:', wordperline); // Counting the number of words per line
-
-// const longestLine = lines.reduce((a, b) => a.length > b.length ? a : b); // Finding the longest line
-
-// console.log('Longest line:', longestLine);
-
-// const longestWord = lines.reduce((a, b) => {
-//     const words = b.split(' ');
-//     return words.reduce((longest, word) => word.length > longest.length ? word : longest, a);
-// }, ''); // Finding the longest word
-
-// console.log('Longest word:', longestWord); // Finding the longest word
-
-// const longestWordLength = longestWord.length; // Finding the length of the longest word
-
-// console.log('Longest word length:', longestWordLength);
-
-// const longestWordLine = lines.reduce((a, b) => {
-//     const words = b.split(' ');
-//     return words.reduce((longest, word) => word.length > longest.length ? b : longest, a);
-// }, ''); // Finding the line with the longest word
-
-// console.log('Longest word line:', longestWordLine); // Finding the line with the longest word
-
-// console.log('File Contents:', contents); // Printing the file contents
-
-// console.log("End of Program");
-
-
-// //Asyncheonous code for the above code
-
-// console.log('Starting Program');
-
-// fs.readFile('./hello.txt', 'utf-8', (err, contents) => {
-//     if(err){
-//         console.log("Error reading file:", err);     
-//     }
-//     else{
-//         const lines = contents.split('\n'); // Splitting the contents into lines
-
-//         const lineCount = lines.length; // Counting the number of lines
-
-//         console.log('Number of lines:', lineCount);
-
-//         const wordperline = lines.map(line => line.split(' ').length); // Counting the number of words per line
-
-//         console.log('Words per line:', wordperline); // Counting the number of words per line
-
-//         const longestLine = lines.reduce((a, b) => a.length > b.length ? a : b); // Finding the longest line
-
-//         console.log('Longest line:', longestLine);
-
-//         const longestWord = lines.reduce((a, b) => {
-//             const words = b.split(' ');
-//             return words.reduce((longest, word) => word.length > longest.length ? word : longest, a);
-//         }, ''); // Finding the longest word
-
-//         console.log('Longest word:', longestWord); // Finding the longest word
-
-//         const longestWordLength = longestWord.length; // Finding the length of the longest word
-
-//         console.log('Longest word length:', longestWordLength);
-
-//         const longestWordLine = lines.reduce((a, b) => {
-//             const words = b.split(' ');
-//             return words.reduce((longest, word) => word.length > longest.length ? b : longest, a);
-//         }, ''); // Finding the line with the longest word
-
-//         console.log('Longest word line:', longestWordLine); // Finding the line with the longest word
-
-//         console.log('File Contents:', contents); // Printing the file contents
-//     }
-// });
-
-// console.log("End of Program");
-
-// //Asynchronous code with callback function
-// sum(2,5,(result)=>{
-//     console.log("Sum:", result); // 7
-// });
-// // console.log("Sum:", result); // 7
-// function sum(a, b,cb) {
-//     setTimeout(() => {
-//         cb(a+b);
-//     },5*1000);
-// }
-// //getWeatherData("London", (data) => {
-// //     console.log("Weather data:", data);
-// // });
-
-// //1.Read the contents of file from hello.txt
-// //2. Then create a new file  named as backup.txt
-// //3. Copy the contents of hello file to backup file
-// //4. Delete the hello.txt file
-// //----------------------LEGACY CODE-----------------------------
-// fs.readFile('./hello.txt', 'utf-8', (err, contents) => {
-//     if (err){
-//         console.log("Error reading file:", err);
-
-//     }
-//     else{
-//         console.log("File read successfully", contents);
-//          fs.writeFile('./backup.txt', contents, (err) => {
-//             if (err){
-//                 console.log("Error writing file:", err);
-//             }
-//             else{
-//                 console.log("File copied successfully");
-//                 fs.unlink('./hello.txt', (err) => {
-//                     if (err){
-//                         console.log("Error deleting file:", err);
-//                     }
-//                     else{
-//                         console.log("File deleted successfully");
-//                     }
-//                 });
-//             }
-
-//          });
-//     } 
-// });
-// // We are in Callback hell because of two nesting of callback functions
-// // We can use Promises to avoid callback hell
-// // 1. Create a function that returns a promise
-// // 2. Use the promise in the callback function
-// // 3. Use the promise in the then function
-// // 4. Use the promise in the catch function
-// // 5. Use the promise in the finally function
-// // 6. Use the promise in the all function
-
-// //Asynchronous code with promise
-
-// //-----------------------MODERN CODE----------------------------
-// import fsv2 from 'fs/promises'; // Importing the fs module
-
-// // const res = await fsv2.readFile('./hello.txt', 'utf-8'); // Reading the file
-
-// console.log("File read successfully", res); // Printing the file contents
-
-
-// fsv2.readFile('./backup.txt', 'utf-8')
-// .then((contents) => {
-//     console.log("File read successfully", contents); // Printing the file contents
-//     return fsv2.writeFile('./backup.txt', contents); // Writing the file
-// })
-// .then(() => {
-//     console.log("File copied successfully"); // Printing the file contents
-//     console.log("deleting file ..."); // Printing the file contents
-//     return fsv2.unlink('./hello.txt'); // Deleting the file       
-// })
-// .catch((err) => {
-//     console.log("Error:", err); // Printing the file contents
-// }
-// ).finally(() => {
-//     console.log("new File replaced"); // Printing the file contents
-// }
-// ); // Printing the file contents
-
 import fsv2 from 'fs/promises'; // Importing the fs module
+import fs from 'fs'; // Standard fs module for streams
+import readline from 'readline'; // Import readline module
 
+// File operations with promises
 fsv2.readFile('./backup.txt', 'utf-8')
-.then((contents) => {
-    console.log("File read successfully", contents); // Printing the file contents
-    return fsv2.writeFile('./file.txt', contents); // Writing the file
-})
-.then(() => {
-    console.log("File copied successfully"); // Printing the file contents
-    console.log("deleting file ..."); // Printing the file contents
-    return fsv2.unlink('./backup.txt'); // Deleting the file       
-})
-.then(() => {   
-    console.log("File deleted successfully"); // Printing the file contents
-}
-).catch((err) => {
-    console.log("Error:", err); // Printing the file contents
-}
-).finally(() => {
-    console.log("new File replaced"); // Printing the file contents
-}
-)
-.finally(() => {
-    console.log("File deleted successfully"); // Printing the file contents
-}
-); // Printing the file contents
+    .then((contents) => {
+        console.log("File read successfully", contents);
+        return fsv2.writeFile('./file.txt', contents);
+    })
+    .then(() => {
+        console.log("File copied successfully");
+        console.log("deleting file ...");
+        return fsv2.unlink('./backup.txt');
+    })
+    .then(() => {
+        console.log("File deleted successfully");
+    })
+    .catch((err) => {
+        console.log("Error:", err);
+    })
+    .finally(() => {
+        console.log("new File replaced");
+    });
 
+// Example 1: API Fetching with Error Handling
+async function fetchUserData(userId) {
+        try {
+                const response = await fetch(`https://api.example.com/users/${userId}`);
+                if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const userData = await response.json();
+                return userData;
+        } catch (error) {
+                console.error("Error fetching user data:", error);
+                throw error;
+        }
+}
+
+// Mock db object for the example
+const db = {
+        accounts: {
+                findById: async (id) => ({ id, balance: id === 'acc1' ? 1000 : 500 }),
+                update: async (id, data) => ({ id, ...data })
+        }
+};
+
+// Example 2: Sequential Database Operations
+async function transferFunds(fromAccountId, toAccountId, amount) {
+        try {
+                const fromAccount = await db.accounts.findById(fromAccountId);
+                const toAccount = await db.accounts.findById(toAccountId);
+                
+                if (fromAccount.balance < amount) {
+                        throw new Error("Insufficient funds");
+                }
+                
+                await db.accounts.update(fromAccountId, { balance: fromAccount.balance - amount });
+                await db.accounts.update(toAccountId, { balance: toAccount.balance + amount });
+                
+                return { success: true, message: "Transfer completed" };
+        } catch (error) {
+                console.error("Transfer failed:", error);
+                return { success: false, message: error.message };
+        }
+}
+
+// Example 3: Parallel Operations with Promise.all
+async function loadDashboardData(userId) {
+        try {
+                // Using mock fetch for the example
+                const mockFetch = async () => ({ json: async () => ({ data: "mock data" }) });
+                
+                const [userData, userPosts, userAnalytics] = await Promise.all([
+                        mockFetch().then(res => res.json()),
+                        mockFetch().then(res => res.json()),
+                        mockFetch().then(res => res.json())
+                ]);
+                
+                return { userData, userPosts, userAnalytics };
+        } catch (error) {
+                console.error("Failed to load dashboard data:", error);
+                throw error;
+        }
+}
+
+// Utility function for delay
+function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Example 4: Retry Logic with Exponential Backoff
+async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+        let retries = 0;
+        
+        while (retries < maxRetries) {
+                try {
+                        // Using mock fetch for the example
+                        const mockResponse = { ok: retries > 1, status: retries > 1 ? 200 : 429, json: async () => ({ data: "success" }) };
+                        
+                        if (mockResponse.ok) return await mockResponse.json();
+                        
+                        if (mockResponse.status === 429) {
+                                throw new Error('Rate limited');
+                        }
+                        
+                        return mockResponse;
+                } catch (error) {
+                        retries++;
+                        if (retries >= maxRetries) throw error;
+                        
+                        const delay = Math.pow(2, retries - 1) * 1000;
+                        console.log(`Retrying in ${delay}ms... (${retries}/${maxRetries})`);
+                        await sleep(delay);
+                }
+        }
+}
+
+// Example 5: Async Generators
+async function* streamData(dataSource, pageSize = 100) {
+        let currentPage = 1;
+        let hasMoreData = true;
+        
+        // Mock data for example
+        const mockData = [
+                [{ id: 1 }, { id: 2 }],
+                [{ id: 3 }, { id: 4 }],
+                []
+        ];
+        
+        while (hasMoreData) {
+                // Mock fetch
+                const data = mockData[currentPage - 1] || [];
+                
+                if (data.length === 0) {
+                        hasMoreData = false;
+                } else {
+                        yield data;
+                        currentPage++;
+                }
+        }
+}
+
+// Process function for streaming example
+async function processItem(item) {
+        console.log(`Processing item ${item.id}`);
+        await sleep(10); // Simulate processing time
+}
+
+// Usage of async generator
+async function processStreamingData() {
+        const dataStream = streamData('https://api.example.com/largeDataSet');
+        
+        for await (const batch of dataStream) {
+                console.log(`Processing batch of ${batch.length} items`);
+                for (const item of batch) {
+                        await processItem(item);
+                }
+        }
+        console.log('Finished processing all data');
+}
+
+// Helper function for file processing example
+async function processLine(line) {
+        return line.toUpperCase(); // Simple transformation
+}
+
+// Example 6: Real-world file processing with streams
+async function processLargeFile(inputFile, outputFile) {
+        try {
+                const readStream = fs.createReadStream(inputFile); // Use fs, not fsv2
+                const writeStream = fs.createWriteStream(outputFile);
+                
+                const lineReader = readline.createInterface({
+                        input: readStream,
+                        crlfDelay: Infinity
+                });
+                
+                for await (const line of lineReader) {
+                        const processedLine = await processLine(line);
+                        
+                        if (processedLine) {
+                                writeStream.write(processedLine + '\n');
+                        }
+                }
+                
+                writeStream.end();
+                console.log(`File processing complete: ${inputFile} → ${outputFile}`);
+        } catch (error) {
+                console.error("Error processing file:", error);
+        }
+}
+
+// Execute one of the examples safely
+(async () => {
+        try {
+                // Example using mocked functionality rather than actual API call
+                const result = await loadDashboardData("user123");
+                console.log("Result:", result);
+                
+                // Try the streaming example
+                await processStreamingData();
+                
+                // Try the file operation if files exist (commented out to prevent errors)
+                // await processLargeFile('input.txt', 'output.txt');
+        } catch (error) {
+                console.error("Operation failed:", error);
+        }
+})();

@@ -1,3 +1,6 @@
+//Promisification of the promise is the wrapping of the callback function in a promise .
+//promisify package is required to convert the callback function into a promise.
+// import promisify from 'util.promisify'; // Importing the promisify function from blue bird
 import fs from 'fs'; // Importing the fs module
 // import fsv2 from 'fs/promises'; // Importing the fs module
 
