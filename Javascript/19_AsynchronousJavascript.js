@@ -327,3 +327,11 @@ doTasks();
 //         sendWhatsAppNotification();
 // }
 
+// registerUser().then(() => {
+//         console.log("User registered successfully");
+// }).catch((err) => {
+//         console.log("Error:", err);
+// }).finally(() => {
+//         console.log("User registration process completed");
+// });
+
