@@ -162,4 +162,18 @@ fetchWithRetry(url, options, 2, 2000)
     .then(result => console.log("Custom Promise Result:", result))
     .catch(error => console.error("Custom Promise Error:", error));
 
-    
+// If promise is fulfilled or rejected, then the promise is settled.
+// If promise is pending, then the promise is not settled.
+// If promise is settled then finally works
+
+// 10. Using finally to execute code after promise settles
+const promiseWithFinally = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Promise settled!");
+  }, 1000);
+});
+promiseWithFinally
+  .then(result => console.log("Result:", result))
+  .catch(error => console.error("Error:", error))
+  .finally(() => console.log("Promise has settled, regardless of outcome."));
+
