@@ -314,4 +314,16 @@ function wait(ms) {
         console.log("new File replaced"); // Printing the file contents
     }
  }
-doTasks();   
+doTasks();
+
+
+// async function registerUser(){
+//         await collectData();
+//         validateUserEmail();
+//         await insertInDb();
+//         sendEmail();
+//         sendSms();
+//         sendPushNotification();
+//         sendWhatsAppNotification();
+// }
+
