@@ -35,3 +35,7 @@ const proxyUser = new Proxy(user, {
 console.log(proxyUser.name); // Aniket
 console.log(proxyUser.age); // 20
 // console.log(proxyUser.password); // 123
+//target's address is passed to the proxy object. 
+
+
+
