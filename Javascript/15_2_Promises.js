@@ -100,3 +100,64 @@ function fetchWithRetry(url, options, retries = 3, delay = 1000) {
 fetchWithRetry(url, options, 2, 2000)
   .then(data => console.log("Data after potential retries:", data))
   .catch(error => console.error("All retries failed:", error));
+
+  // 9. Understanding Promise mechanics by implementing a simplified version
+  class MyPromise {
+    constructor(executor) {
+      this.state = 'pending';
+      this.value = undefined;
+      this.thenCallbacks = [];
+      this.catchCallbacks = [];
+
+      const resolve = value => {
+        if (this.state === 'pending') {
+          this.state = 'fulfilled';
+          this.value = value;
+          this.thenCallbacks.forEach(callback => callback(this.value));
+        }
+      };
+
+      const reject = reason => {
+        if (this.state === 'pending') {
+          this.state = 'rejected';
+          this.value = reason;
+          this.catchCallbacks.forEach(callback => callback(this.value));
+        }
+      };
+
+      try {
+        executor(resolve, reject);
+      } catch (error) {
+        reject(error);
+      }
+    }
+
+    then(onFulfilled) {
+      if (this.state === 'fulfilled') {
+        setTimeout(() => onFulfilled(this.value), 0);
+      } else {
+        this.thenCallbacks.push(onFulfilled);
+      }
+      return this; // For chaining
+    }
+
+    catch(onRejected) {
+      if (this.state === 'rejected') {
+        setTimeout(() => onRejected(this.value), 0);
+      } else {
+        this.catchCallbacks.push(onRejected);
+      }
+      return this;
+    }
+  }
+
+  // Test our custom Promise implementation
+  const myCustomPromise = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Custom promise resolved!");
+    }, 1000);
+  });
+
+  myCustomPromise
+    .then(result => console.log("Custom Promise Result:", result))
+    .catch(error => console.error("Custom Promise Error:", error));
