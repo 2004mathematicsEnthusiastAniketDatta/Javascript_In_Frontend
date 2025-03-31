@@ -77,3 +77,28 @@ deleteFileWithPromise('./hello.txt')
         console.log("new File replaced"); // Printing the file contents
     }
     ); // Printing the file contents
+
+// Using async/await
+function wait(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+ async function doTasks(){
+    try{
+        const data = await readFileWithPromise('./hello.txt', 'utf-8');
+        console.log("File read successfully", data); // Printing the file contents
+        await writeFileWithPromise('./hello2.txt', 'Hello World');
+        await wait(10);
+        console.log("File written successfully"); // Printing the file contents
+        await deleteFileWithPromise('./hello.txt');
+        console.log("File deleted successfully"); // Printing the file contents
+    }
+    catch(err){
+        console.log("Error:", err); // Printing the file contents
+    }
+    finally{
+        console.log("new File replaced"); // Printing the file contents
+    }
+ }
+doTasks();   
