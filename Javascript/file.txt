@@ -1,0 +1,73 @@
+// File Management in JavaScript
+
+// BROWSER FILE MANAGEMENT
+// -----------------------
+
+// 1. File API (Browser)
+// Reading files from input element
+const fileInput = document.createElement('input');
+fileInput.type = 'file';
+fileInput.onchange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+        const contents = e.target.result;
+        console.log('File contents:', contents);
+    };
+    
+    reader.readAsText(file); // For text files
+    // reader.readAsDataURL(file); // For binary files as base64
+    // reader.readAsArrayBuffer(file); // For binary data
+};
+
+// 2. Saving files in browser
+function saveFile(content, filename, type) {
+    const blob = new Blob([content], { type: type || 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    
+    URL.revokeObjectURL(url);
+}
+
+// NODE.JS FILE MANAGEMENT
+// ----------------------
+
+// 1. Basic file operations (Node.js)
+// const fs = require('fs');
+
+// Reading a file synchronously
+// const data = fs.readFileSync('file.txt', 'utf8');
+
+// Reading a file asynchronously
+// fs.readFile('file.txt', 'utf8', (err, data) => {
+//   if (err) throw err;
+//   console.log(data);
+// });
+
+// Writing to a file
+// fs.writeFileSync('output.txt', 'Hello, world!');
+// fs.writeFile('output.txt', 'Hello, world!', (err) => {
+//   if (err) throw err;
+//   console.log('File written successfully');
+// });
+
+// 2. Working with directories
+// fs.mkdirSync('newdir');
+// const files = fs.readdirSync('directory');
+
+// 3. Promises API (Node.js)
+// const fsPromises = require('fs').promises;
+
+// async function processFile() {
+//   try {
+//     const content = await fsPromises.readFile('file.txt', 'utf8');
+//     await fsPromises.writeFile('output.txt', content.toUpperCase());
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// }
