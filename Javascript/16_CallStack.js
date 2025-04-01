@@ -459,3 +459,182 @@ The React Explained Clearly book is all you need to understand ReactJS.
 hoisting happens in let but cannot be accessed because of temporal dead zone.
 hoisting in const occurs but cannot be accessed because of temporal dead zone.
 */
+//Behaviour of 'this' keyword 
+
+const exampleObj = { name: 'Example' };
+function fn() { console.log(this.name); }
+const boundFn = fn.bind(exampleObj);
+boundFn(); // "Example"
+/*# Understanding the `this` Keyword in JavaScript for Interview Preparation
+
+The `this` keyword is one of JavaScript's most powerful yet often confusing features. Understanding it thoroughly is essential for interviews and practical development.
+
+## Basic Concept
+
+In JavaScript, `this` refers to the execution context of a function - the object that is currently executing the function. Unlike other programming languages, the value of `this` is not determined by how a function is defined, but by how it's called.
+
+## Different Binding Rules
+
+### 1. Default Binding
+When a function is called without any context:
+
+```javascript
+function showThis() {
+  console.log(this);
+}
+
+showThis(); // In non-strict mode: window/global object
+            // In strict mode: undefined
+```
+
+### 2. Implicit Binding
+When a function is called as a method of an object:
+
+```javascript
+const user = {
+  name: 'Alice',
+  greet() {
+    console.log(`Hello, I'm ${this.name}`);
+  }
+};
+
+user.greet(); // "Hello, I'm Alice" - 'this' refers to the user object
+```
+
+### 3. Explicit Binding
+When `call()`, `apply()`, or `bind()` methods are used:
+
+```javascript
+function introduce(hobby1, hobby2) {
+  console.log(`I'm ${this.name} and I like ${hobby1} and ${hobby2}`);
+}
+
+const person = { name: 'Bob' };
+
+// Using call
+introduce.call(person, 'coding', 'hiking');
+
+// Using apply (arguments as array)
+introduce.apply(person, ['reading', 'swimming']);
+
+// Using bind (returns a new function)
+const bobIntroduce = introduce.bind(person);
+bobIntroduce('music', 'cooking');
+```
+
+### 4. Constructor Binding
+When a function is used with the `new` keyword:
+
+```javascript
+function Person(name) {
+  this.name = name;
+  this.sayHi = function() {
+    console.log(`Hi, I'm ${this.name}`);
+  };
+}
+
+const john = new Person('John');
+john.sayHi(); // "Hi, I'm John"
+```
+
+## Arrow Functions and `this`
+
+Arrow functions don't have their own `this` context - they inherit `this` from the surrounding (lexical) scope:
+
+```javascript
+const obj = {
+  name: 'Object',
+  regularFunc: function() {
+    console.log('Regular function:', this.name);
+    
+    setTimeout(function() {
+      // 'this' is rebound to window/global in callback
+      console.log('Regular callback:', this.name);
+    }, 100);
+    
+    setTimeout(() => {
+      // Arrow function inherits 'this' from outer scope
+      console.log('Arrow callback:', this.name);
+    }, 100);
+  }
+};
+
+obj.regularFunc();
+// Regular function: Object
+// Regular callback: "" (or undefined in strict mode)
+// Arrow callback: Object
+```
+
+## Common Interview Questions
+
+1. **How does `this` behave differently in strict mode?**
+   In strict mode, default binding sets `this` to `undefined` instead of the global object.
+
+2. **How can you fix the `this` context in callbacks?**
+   Use arrow functions, `bind()`, or store `this` in a variable (often called `self` or `that`).
+
+3. **What's the output of the following code?**
+   ```javascript
+   const obj = { name: 'Example' };
+   function fn() { console.log(this.name); }
+   const boundFn = fn.bind(obj);
+   boundFn(); // "Example"
+   ```
+
+Understanding these concepts thoroughly will help you answer most interview questions related to the `this` keyword in JavaScript.
+
+*/
+const obj = {
+  name: 'Object',
+  regularFunc: function() {
+    console.log('Regular function:', this.name);
+    
+    setTimeout(function() {
+      // 'this' is rebound to window/global in callback
+      console.log('Regular callback:', this.name);
+    }, 100);
+    
+    setTimeout(() => {
+      // Arrow function inherits 'this' from outer scope
+      console.log('Arrow callback:', this.name);
+    }, 100);
+  }
+};
+
+obj.regularFunc();
+// Regular function: Object
+// Regular callback: "" (or undefined in strict mode)
+// Arrow callback: Object
+
+function introduce(hobby1, hobby2) {
+  console.log(`I'm ${this.name} and I like ${hobby1} and ${hobby2}`);
+}
+
+const person = { name: 'Bob' };
+
+// Using call
+introduce.call(person, 'coding', 'hiking');
+
+// Using apply (arguments as array)
+introduce.apply(person, ['reading', 'swimming']);
+
+// Using bind (returns a new function)
+const bobIntroduce = introduce.bind(person);
+bobIntroduce('music', 'cooking');
+
+function Person(name) {
+  this.name = name;
+  this.sayHi = function() {
+    console.log(`Hi, I'm ${this.name}`);
+  };
+}
+
+const john = new Person('John');
+john.sayHi(); // "Hi, I'm John"
+
+function showThis() {
+  console.log(this);
+}
+
+showThis(); // In non-strict mode: window/global object
+            // In strict mode: undefined
