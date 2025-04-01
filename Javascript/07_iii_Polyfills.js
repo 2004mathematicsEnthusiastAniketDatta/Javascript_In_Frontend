@@ -197,3 +197,58 @@ let total = arr8.Reduces((accumulator, currentValue) => accumulator + currentVal
 console.log(total);
 //Output: 15
 
+//Pollyfills -> Object.__proto__.name = function(){}
+
+// arr.map(e => e*2); Arrays-> Arrays.__proto__.map = function(callback){  
+  //   if(this == null) throw new TypeError('this is null or not defined');
+  //       let O= Object(this);
+  //       let len = O.length >>> 0;
+  //       let mappedArr = new Array(len);
+  //       for(let i=0;i<len;i++){
+  //         if(i in O){
+  //           mappedArr[i] = callback(O[i],i,O);
+  //         }
+  //       }
+  //       return mappedArr;
+  //   };
+  // } }
+
+// Promises , Modern Functionalities
+
+//Internet Exploer old version may not support arr.map(e=>e*2);
+// Fallback
+// Providing functionalities not available because of Browser
+// A polyfill is apiece of code that allows older browsers to implement modern javascript features.
+// Razorpay -> polyfill.js
+
+//class Array in the browser
+//class Array{
+//Constructor(){
+//    this.length = 0;
+//    this.push = function(){}
+//    this.pop = function(){}
+//    this.shift = function(){}
+//    this.unshift = function(){}
+//    this.splice = function(){}
+//    this.slice = function(){}   
+//    this.concat = function(){}
+//    this.join = function(){}
+//    this.indexOf = function(){}
+// .....
+//}
+// Array.prototype = {
+//    constructor: Array,
+//    push: function(){},
+//    pop: function(){},
+//    shift: function(){},
+//    unshift: function(){},
+//    splice: function(){},
+//    slice: function(){},
+//    concat: function(){},
+//    join: function(){},
+//    indexOf: function(){},
+//    forEach: function(){},
+// ..........
+//}
+// functions
+//}
