@@ -250,5 +250,8 @@ console.log(total);
 //    forEach: function(){},
 // ..........
 //}
-// functions
+// 
 //}
+
+// class.object.method
+
