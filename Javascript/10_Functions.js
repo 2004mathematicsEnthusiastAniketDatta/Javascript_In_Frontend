@@ -889,11 +889,11 @@ console.log(counter()); //4
 // })();
 // ({})();
 
-function greet(name){
+function greetz(name){
     console.log(`Hello ${name}`);
 }
-greet('Alice');
-greet('Bob');
+greetz('Alice');
+greetz('Bob');
 
 let GlobalVar = "I am a global variable";
 
@@ -951,6 +951,26 @@ console.log(bindedGreet);
 
 //apply method
 person1.greet.apply(person2); //Hello Hitesh
+
+// First-class functions
+ function  outerfunction(fn , delay){
+    console.log(arguments);
+    let myId;
+    return function innerFunction(...args){
+        clearTimeout(myId);
+    myId = setTimeout(() => {
+      fn();
+      fn.apply(this,args); //calling the function with the context of the outer function ??,
+      //binding the arguments to the function with a new variable??
+
+      }, delay);
+    }
+ }
+outerfunction()
+const g = outerfunction(()=>{ 
+
+},2*1000); // g stores a reference to innerFunction
+g();
 
 
 
