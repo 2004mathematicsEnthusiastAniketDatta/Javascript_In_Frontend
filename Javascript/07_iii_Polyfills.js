@@ -255,3 +255,120 @@ console.log(total);
 
 // class.object.method
 
+if(!Array.prototype.myForEach){
+  Array.prototype.myForEach = function(cb){
+      for (let i = 0; i< this.length; i++) {
+          cb(this[i], i, this); 
+      }
+  }
+}
+const arr10 = [1, 2, 3, 4, 5];
+arr.myForEach((item, index, array) => {
+  console.log(`Item: ${item}, Index: ${index}, Array: ${array}`);
+}
+);
+
+if(!Array.prototype.myMap){
+  Array.prototype.myMap = function(cb){
+      let newArr =[];
+      for (let i = 0; i < this.length; i++) {
+          newArr.push(cb(this[i],i));
+      }
+      return newArr;
+  }
+}
+const arr11 = [1, 2, 3, 4, 5];
+const newArr = arr11.myMap((item, index) => {
+  return item * 2;
+}
+);
+console.log(newArr); // [2, 4, 6, 8, 10]
+
+
+let person = {
+  firstname: "Aniket",
+  lastname: "Datta",
+  print: function (country) {
+    console.log(this.firstname + " " + this.lastname+ " from " + country);
+  }
+}
+person.print("India");
+let printName = function (country) {
+  console.log(this.firstname + " " + this.lastname + " from " 
+  + country);
+}
+// person.printName("India");
+//Call -> The call() method of Function instances calls this function with a given this value 
+// and arguments provided individually. 
+printName.call(person, "India");
+//Polyfill for call
+if(!Function.prototype.calls){
+  Function.prototype.calls = function(obj,...args){
+    obj.fn = this;
+    obj.fn(...args);
+    delete obj.fn;
+  }
+}
+let user = {
+  firstname: "John",
+  lastname: "Doe",
+}
+printName.calls(user, "USA");
+
+// Apply -> The apply() method of Function instances calls this function with a given this value,
+// and arguments provided as an array (or an array-like object).
+
+printName.apply(user, ["USA"]);
+
+
+// Polyfill for apply
+
+if(!Function.prototype.applies){
+  Function.prototype.applies = function(obj,args){
+    obj.fn = this;
+    obj.fn(...args);
+    delete obj.fn;
+  }
+}
+printName.applies(user, ["USA"]);
+
+// Bind -> The bind() method of Function instances creates a new function that, 
+// when called, calls this function with its this keyword set to the provided value, 
+// and a given sequence of arguments preceding 
+// any provided when the new function is called.
+
+// Polyfill for bind
+
+if (!Function.prototype.binds) {
+	Function.prototype.binds = function (oThis) {
+		if (typeof this !== "function") {
+			// closest thing possible to the ECMAScript 5 internal IsCallable function
+			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+		}
+
+		var aArgs = Array.prototype.slice.call(arguments, 1),
+			fToBind = this,
+			fNOP = function () {},
+			fBound = function () {
+				return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+			};
+
+		fNOP.prototype = this.prototype;
+		fBound.prototype = new fNOP();
+
+		return fBound;
+	};
+}
+let printNameBind = printName.binds(user, "USA");
+printNameBind("India");
+
+
+
+
+
+
+
+
+
+
+
