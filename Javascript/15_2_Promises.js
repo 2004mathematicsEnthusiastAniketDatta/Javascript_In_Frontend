@@ -102,26 +102,31 @@ fetchWithRetry(url, options, 2, 2000)
   .catch(error => console.error("All retries failed:", error));
 
   // 9. Understanding Promise mechanics by implementing a simplified version
-  class MyPromise {
+  
+  /**
+   * A simplified Promise implementation that follows standard Promise/A+ behavior
+   */
+  class CustomPromise {
     constructor(executor) {
       this.state = 'pending';
       this.value = undefined;
-      this.thenCallbacks = [];
-      this.catchCallbacks = [];
+      this.reason = undefined;
+      this.onFulfilledCallbacks = [];
+      this.onRejectedCallbacks = [];
 
       const resolve = value => {
         if (this.state === 'pending') {
           this.state = 'fulfilled';
           this.value = value;
-          this.thenCallbacks.forEach(callback => callback(this.value));
+          this.onFulfilledCallbacks.forEach(callback => queueMicrotask(() => callback(this.value)));
         }
       };
 
       const reject = reason => {
         if (this.state === 'pending') {
           this.state = 'rejected';
-          this.value = reason;
-          this.catchCallbacks.forEach(callback => callback(this.value));
+          this.reason = reason;
+          this.onRejectedCallbacks.forEach(callback => queueMicrotask(() => callback(this.reason)));
         }
       };
 
@@ -132,48 +137,135 @@ fetchWithRetry(url, options, 2, 2000)
       }
     }
 
-    then(onFulfilled) {
-      if (this.state === 'fulfilled') {
-        setTimeout(() => onFulfilled(this.value), 0);
-      } else {
-        this.thenCallbacks.push(onFulfilled);
-      }
-      return this; // For chaining
+    /**
+     * Registers a callback to be executed when the promise resolves
+     * @param {Function} onFulfilled - Callback for resolution
+     * @param {Function} onRejected - Callback for rejection
+     * @returns {CustomPromise} A new promise for chaining
+     */
+    then(onFulfilled, onRejected) {
+      return new CustomPromise((resolve, reject) => {
+        const fulfilledHandler = value => {
+          if (typeof onFulfilled !== 'function') {
+            resolve(value);
+            return;
+          }
+          
+          try {
+            const result = onFulfilled(value);
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        };
+
+        const rejectedHandler = reason => {
+          if (typeof onRejected !== 'function') {
+            reject(reason);
+            return;
+          }
+          
+          try {
+            const result = onRejected(reason);
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        };
+
+        if (this.state === 'fulfilled') {
+          queueMicrotask(() => fulfilledHandler(this.value));
+        } else if (this.state === 'rejected') {
+          queueMicrotask(() => rejectedHandler(this.reason));
+        } else {
+          this.onFulfilledCallbacks.push(fulfilledHandler);
+          this.onRejectedCallbacks.push(rejectedHandler);
+        }
+      });
     }
 
+    /**
+     * Registers a callback to be executed when the promise rejects
+     * @param {Function} onRejected - Callback for rejection
+     * @returns {CustomPromise} A new promise for chaining
+     */
     catch(onRejected) {
-      if (this.state === 'rejected') {
-        setTimeout(() => onRejected(this.value), 0);
-      } else {
-        this.catchCallbacks.push(onRejected);
-      }
-      return this;
+      return this.then(null, onRejected);
+    }
+
+    /**
+     * Registers a callback to be executed when the promise settles
+     * @param {Function} onFinally - Callback for settlement
+     * @returns {CustomPromise} A new promise for chaining
+     */
+    finally(onFinally) {
+      return this.then(
+        value => {
+          onFinally();
+          return value;
+        },
+        reason => {
+          onFinally();
+          throw reason;
+        }
+      );
+    }
+
+    /**
+     * Creates a resolved promise
+     * @param {*} value - The value to resolve with
+     * @returns {CustomPromise} A resolved promise
+     */
+    static resolve(value) {
+      return new CustomPromise(resolve => resolve(value));
+    }
+
+    /**
+     * Creates a rejected promise
+     * @param {*} reason - The reason for rejection
+     * @returns {CustomPromise} A rejected promise
+     */
+    static reject(reason) {
+      return new CustomPromise((_, reject) => reject(reason));
     }
   }
 
-  // Test our custom Promise implementation
-  const myCustomPromise = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("Custom promise resolved!");
-    }, 1000);
+  // Demo: Using our implementation
+  console.log('--- CustomPromise Demo ---');
+
+  const customPromise = new CustomPromise((resolve, reject) => {
+    console.log('Promise executor running');
+    setTimeout(() => resolve('Operation completed successfully'), 1000);
   });
 
-  myCustomPromise
-    .then(result => console.log("Custom Promise Result:", result))
-    .catch(error => console.error("Custom Promise Error:", error));
+  customPromise
+    .then(result => {
+      console.log('Promise resolved:', result);
+      return 'Chain step 1';
+    })
+    .then(result => {
+      console.log('Chain result:', result);
+      return 'Chain step 2';
+    })
+    .catch(error => {
+      console.error('Error caught:', error);
+    })
+    .finally(() => {
+      console.log('Promise settled (finally callback)');
+    });
 
-// If promise is fulfilled or rejected, then the promise is settled.
-// If promise is pending, then the promise is not settled.
-// If promise is settled then finally works
+  // Example with rejection
+  const failingPromise = new CustomPromise((resolve, reject) => {
+    setTimeout(() => reject(new Error('Operation failed')), 1500);
+  });
 
-// 10. Using finally to execute code after promise settles
-const promiseWithFinally = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve("Promise settled!");
-  }, 1000);
-});
-promiseWithFinally
-  .then(result => console.log("Result:", result))
-  .catch(error => console.error("Error:", error))
-  .finally(() => console.log("Promise has settled, regardless of outcome."));
-
+  failingPromise
+    .then(result => {
+      console.log('This will not run');
+    })
+    .catch(error => {
+      console.error('Error handled:', error.message);
+    })
+    .finally(() => {
+      console.log('Failing promise settled');
+    });
